@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const baseUrl = 'http://localhost:3000';
+const baseUrl = 'http://192.168.1.22:3000';
 
 const request = async(method, endpoint, params, token)=>{
     method = method.toLowerCase();
@@ -37,7 +37,15 @@ export default {
     },
     validateToken: async ()=>{
         let token = await AsyncStorage.getItem('token');
-        let json = await request('post', '/validate', {}, token);
+        let json = await request('post', '/validade', {}, token);
+        return json;
+    },
+    login: async(nmUser,dsSenha) =>{
+        let json = await request('post','/login', {nmUser, dsSenha});
+        return json;
+    },
+    Chamados_Desenvolvimento: async() =>{
+        let json = await request('get','/list');
         return json;
     }
 };

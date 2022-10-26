@@ -1,5 +1,5 @@
 import React, {useContext, createContext, useReducer} from 'react';
-import UserReducer from '../Reducers/UserReducer';
+import UserReducer from '../Reducers/userReducer';
 
 const initalState = {
     user: UserReducer()

@@ -2,8 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const initalState = {
     token:'',
-    name:'',
-    password:''
+    user:{}
 };
 export default(state= initalState, action = {}) =>{
 
@@ -13,10 +12,7 @@ export default(state= initalState, action = {}) =>{
             return {...state,token:action.payload.token};
         break;
         case 'SET_NAME':
-            return {...state,name:action.payload.name};
-        break;
-        case 'SET_PASSWORD':
-            return {...state,password:action.payload.password};
+            return {...state,user:action.payload.user};
         break;
     }
 

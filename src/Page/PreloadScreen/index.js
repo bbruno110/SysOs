@@ -15,11 +15,10 @@ export default () =>{
             let token = await api.getToken();
             if(token){
                 let result = await api.validateToken();
-                if(result.error === ''){
-                    dispatch({type:'SET_NAME',payload:{user:result.user}})
-                    navigation.reset({index:1, routes:[{name:'LoginScreen'}]})
+                if(result.status === ''){
+                    dispatch({type: 'SET_NAME', payload:{user: result.nmUser}});
+                    navigation.reset({index:2, routes:[{name:'AboutScreen'}]})
                 }else{
-                    alert(result.error);
                     dispatch({type:'SET_TOKEN', payload: {token: ''}});
                     navigation.reset({index:1, routes:[{name:'LoginScreen'}]});
                 }

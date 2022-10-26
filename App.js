@@ -1,7 +1,6 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { StateProvider } from './src/Context/StateContext';
-import MainStack from './src/Navigators/MainStack';
 import AuthStack from './src/Navigators/AuthStack';
 
 function App() {

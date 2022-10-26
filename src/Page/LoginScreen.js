@@ -1,10 +1,10 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput} from 'react-native';
 import { connect } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 
 
-function Login(props){
+function Login(){
     const navigation = useNavigation();
     const HandleSobreClick = () =>{
         navigation.navigate('About');
@@ -16,6 +16,7 @@ function Login(props){
                 source={require('../asset/logo100.png')} 
                 style={styles.imagem}
             />
+            <Text style={{fontSize:24, fontWeight:'bold', marginBottom:50}}>Gestao Ordem de Servico</Text>
             <TextInput placeholder='Digite o nome de usuário' style={styles.txtInput}/>
             <TextInput placeholder='Digite a sua senha' style={styles.txtInput} secureTextEntry={true}/>
             <TouchableOpacity style={styles.button} onPress={HandleSobreClick}>
@@ -59,15 +60,4 @@ const styles = StyleSheet.create({
     }
 });
 
-const mapStateToProps =(state) =>{
-    return{
-        name:state.userReducer.name,
-        email:state.userReducer.email
-    };
-}
-
-const mapDispatchToProps = () =>{
-    return{};
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default Login;

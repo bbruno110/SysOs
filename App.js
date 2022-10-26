@@ -1,16 +1,16 @@
 import React from 'react';
-import { Provider } from 'react-redux';
-import MainStack from './src/Navigators/MainStack';
-import Store from './src/store'
 import { NavigationContainer } from '@react-navigation/native';
+import { StateProvider } from './src/Context/StateContext';
+import MainStack from './src/Navigators/MainStack';
+import AuthStack from './src/Navigators/AuthStack';
 
 function App() {
   return(
-    <Provider store={Store}>
+    <StateProvider>
       <NavigationContainer>
-        <MainStack/>
+        <AuthStack/>
       </NavigationContainer>
-    </Provider>
+    </StateProvider>
   );
 }
 

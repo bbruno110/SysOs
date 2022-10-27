@@ -45,7 +45,8 @@ export default {
         return json;
     },
     Chamados_Desenvolvimento: async() =>{
-        let json = await request('get','/list');
+        let token = await AsyncStorage.getItem('token');
+        let json = await request('get','/list', {}, token);
         return json;
     }
 };

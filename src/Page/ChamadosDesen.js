@@ -1,12 +1,25 @@
 import React, {useState, useEffect} from 'react';
-import { Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import api from '../services/api';
 
 function ListarChamadosDesenvolvimento(){
     const navigation = useNavigation();
+    const [chamadosList, setChamadosList] = useState([]);
     const handleVoltar = () =>{
         navigation.goBack();
+    }
+
+    useEffect(()=>{
+        navigation.setOptions({headerTitle: 'Chamados Tasy - Ti Desenvolvimento'});
+        Chamados_Desenvolvimento();
+    },[]);
+    
+    const Chamados_Desenvolvimento = async () =>{
+        const result = await api.Chamados_Desenvolvimento();
+        setChamadosList(result.chamados);
     }
 
     return(
@@ -14,6 +27,7 @@ function ListarChamadosDesenvolvimento(){
             <TouchableOpacity  style={styles.txtBtTelas} onPress={handleVoltar}>
                 <Text style={{fontSize: 24, fontWeight:'bold', color:'#FFF'}}>Voltar</Text>
             </TouchableOpacity>
+            <FlatList data={setChamadosList} renderItem={({item})=><WallItem data={item}/>} keyExtractor={(item)=>item.nrSequency.toString()}/>
         </LinearGradient >
     )
 }

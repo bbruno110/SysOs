@@ -3,7 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import PreloadScreen from '../Page/PreloadScreen/index'
 import Login from '../Page/LoginScreen';
 import AboutScreen from '../Page/AboutScreen'
-import ListarChamadosDesenvolvimento from '../Page/ChamadosDesen';
+import MainDrawer from './MainDrawer';
 const Stack = createStackNavigator();
 
 export default () =>{
@@ -20,13 +20,8 @@ export default () =>{
                 options={{headerShown:false}}
             />
             <Stack.Screen
-                name="AboutScreen"
-                component={AboutScreen}
-                options={{headerShown:false}}
-            />
-            <Stack.Screen
-                name="ListarChamadosDesenvolvimento"
-                component={ListarChamadosDesenvolvimento}
+                name="MainDrawer"
+                component={MainDrawer}
                 options={{headerShown:false}}
             />
         </Stack.Navigator>

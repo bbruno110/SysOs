@@ -14,7 +14,6 @@ function Login(){
     const [context, dispatch] = useStateValue();
     const [nmUser, setName] = useState('');
     const [dsSenha, setPassword] =useState('');
-    const [hidePass, setHidePass] = useState(true);
     const HandleLoginBtn = async () =>{
         if(nmUser && dsSenha)
         {
@@ -24,7 +23,7 @@ function Login(){
                 dispatch({type: 'SET_TOKEN', payload:{token: result.token}});
                 dispatch({type: 'SET_NAME', payload:{user: result.user}});
 
-                navigation.reset({index:2, routes:[{name:'AboutScreen'}]})
+                navigation.reset({index:2, routes:[{name:'MainDrawer'}]})
             }
             else
             {

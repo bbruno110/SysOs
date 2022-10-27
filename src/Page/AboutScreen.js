@@ -15,7 +15,7 @@ function AboutScreen(){
         navigation.reset({index:1, routes:[{name:'PreloadScreen'}]});
     };
     const HandleDesenvolvimento = () =>{
-        navigation.navigate('ListarChamadosDesenvolvimento')
+        /*navigation.reset({index: 1, routes:[{name: 'MainDrawer'}]})*/
     }
     return(
         <LinearGradient colors={['#07142E', '#003478', '#005688']} style={styles.container}>

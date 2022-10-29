@@ -9,6 +9,18 @@ export default () =>{
     return(
         <Drawer.Navigator
             drawerContent={(props)=><DrawerCustom {...props}/>}
+            screenOptions={{
+                headerShown: true,
+                headerTitle: '',
+                headerStyle:{ 
+                    backgroundColor: '#F5F5FB', 
+                    shadowOpacity: 0, 
+                    elevation: 0,
+                },
+                headerTitleStyle:{
+                    width: 500
+                }
+            }}
         >
             <Drawer.Screen 
                 name="WallScreen"

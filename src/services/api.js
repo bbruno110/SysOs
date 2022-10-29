@@ -48,5 +48,10 @@ export default {
         let token = await AsyncStorage.getItem('token');
         let json = await request('get','/list', {}, token);
         return json;
+    },
+    AtenderChamado: async(nrSequency) =>{
+        let token = await AsyncStorage.getItem('token');
+        let json = await request('put',`/atend?nrSequency=${nrSequency}`,{}, token);
+        return json; 
     }
 };

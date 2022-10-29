@@ -57,10 +57,39 @@ const FooterProfile = styled.Text`
     color: #000;
 `;
 const FooterUnitButton = styled.TouchableOpacity``;
+const MenuButton = styled.TouchableOpacity`
+    flex-direction: row;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    align-items: center;
+`;
+const MenuSquare = styled.View`
+    width: 5px;
+    height:35px;
+    margin-right:20px;
+    background-color: transparent;
+    border-top-right-radius:5px;
+    border-bottom-right-radius:5px;
+`;
+const MenuButtonText = styled.Text`
+    font-size: 15px;
+    margin-left: 10px;
+    color: #666E78;
+`;
 
 export default (props) =>{
     const [context, dispatch] = useStateValue();
     const navigation = useNavigation();
+    const menus = [
+        {title: 'Chamados Tasy - Desenvolvimento', icon: 'gears', screen: 'TasyDesenvolvScreen'},
+        {title: 'Chamados Tasy - Cadastros', icon: 'user', screen: 'TasyCadScreen'},
+        {title: 'Chamados Tasy - TI', icon: 'windows', screen: 'TasyTIScreen'},
+    ];
+    const HandleLogoutBtn = async () =>{
+        dispatch({type:'SET_TOKEN', payload: {token: ''}});
+        navigation.reset({index:1, routes:[{name:'PreloadScreen'}]});
+    };
+
     return (
         <DrawerArea>
             <DrawerLogoArea>
@@ -70,15 +99,14 @@ export default (props) =>{
                     <Drawerspace></Drawerspace>
             </DrawerLogoArea>
             <DrawerScroller>
-
+                {menus.map((item, index)=>(
+                    <MenuButton key={index}>
+                        <MenuSquare></MenuSquare>
+                        <Icon name={item.icon} size={20} color={'#666E78'} />
+                        <MenuButtonText>{item.title}</MenuButtonText>
+                    </MenuButton>
+                ))}
             </DrawerScroller>
-            <ChangeUnitArea>
-                <ChangeUnitButton>
-                    <ChangeUnitButtonText>
-                        Trocar Unidade
-                    </ChangeUnitButtonText>
-                </ChangeUnitButton>
-            </ChangeUnitArea>
             <FooterArea>
                 <FooterInfo>
                     <FooterProfile>
@@ -86,7 +114,7 @@ export default (props) =>{
                     </FooterProfile>
                 </FooterInfo>
                 <FooterUnitButton>
-                    <Icon name="gear" size={24} color="#666E78"/>
+                    <Icon name="arrow-circle-o-left" size={24} color="#666E78" onPress={HandleLogoutBtn}/>
                 </FooterUnitButton>
             </FooterArea>
         </DrawerArea>

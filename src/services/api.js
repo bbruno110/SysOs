@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const baseUrl = 'http://192.168.1.22:3000';
+const baseUrl = 'http://192.168.1.22:7000';
 
 const request = async(method, endpoint, params, token)=>{
     method = method.toLowerCase();

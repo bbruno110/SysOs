@@ -12,6 +12,7 @@ export default (props) =>{
     const route = useRoute();
     const nrSequency = props.route.params.nrSequency;
     const [dsTecnico, onChangeText] = React.useState('');
+    const voltar = props.route.params.screen
     const [context, dispatch] = useStateValue();
     useEffect(()=>{
         navigation.setOptions({
@@ -36,7 +37,8 @@ export default (props) =>{
         {
             const result = await api.FinalizarChamado(nrSequency, dsTecnico);
             onChangeText('');
-            navigation.navigate(props.route.params.screen)
+            /*navigation.navigate(props.route.params.screen)*/
+            navigation.reset({index:2, routes:[{name:'MainDrawer'}]})
            
         }
         else{

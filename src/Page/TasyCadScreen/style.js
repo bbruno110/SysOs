@@ -20,4 +20,4 @@ export default {
     List: styled.FlatList`
         flex: 1;
     `
-}
+};

@@ -44,6 +44,16 @@ export default {
         let json = await request('post','/login', {nmUser, dsSenha});
         return json;
     },
+    Chamados_TI: async() =>{
+        let token = await AsyncStorage.getItem('token');
+        let json = await request('get','/list-ti', {}, token);
+        return json;
+    },
+    Chamados_CAD: async() =>{
+        let token = await AsyncStorage.getItem('token');
+        let json = await request('get','/list-cad', {}, token);
+        return json;
+    },
     Chamados_Desenvolvimento: async() =>{
         let token = await AsyncStorage.getItem('token');
         let json = await request('get','/list', {}, token);
@@ -52,6 +62,11 @@ export default {
     AtenderChamado: async(nrSequency) =>{
         let token = await AsyncStorage.getItem('token');
         let json = await request('put',`/atend?nrSequency=${nrSequency}`,{}, token);
+        return json; 
+    },
+    FinalizarChamado: async(nrSequency, dsTecnico) =>{
+        let token = await AsyncStorage.getItem('token');
+        let json = await request('put',`/endOs?nrSequency=${nrSequency}`,{dsTecnico}, token);
         return json; 
     }
 };

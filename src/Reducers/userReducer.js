@@ -2,7 +2,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const initalState = {
     token:'',
-    user:{}
+    user:{},
+    nrSequency: ''
 };
 export default(state= initalState, action = {}) =>{
 
@@ -13,6 +14,9 @@ export default(state= initalState, action = {}) =>{
         break;
         case 'SET_NAME':
             return {...state,user:action.payload.user};
+        break;
+        case 'SET_nrSequency':
+            return {...state,nrSequency:action.payload.nrSequency};
         break;
     }
 

@@ -1,9 +1,13 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import LinearGradient from 'react-native-linear-gradient';
+import WallScreen from '../Page/WallScreen';
 import { useNavigation } from '@react-navigation/native'
+import TasyTIScreen from '../Page/TasyTIScreen';
+import AboutScreen from '../Page/AboutScreen';
 import { useStateValue } from '../Context/StateContext';
 import Icon from 'react-native-vector-icons/FontAwesome';
+
 const DrawerArea = styled.View`
     flex:1;
     background-color: #eafcf7;
@@ -81,9 +85,9 @@ export default (props) =>{
     const [context, dispatch] = useStateValue();
     const navigation = useNavigation();
     const menus = [
-        {title: 'Chamados Tasy - Desenvolvimento', icon: 'gears', screen: 'TasyDesenvolvScreen'},
+        {title: 'Chamados Tasy - Desenvolvimento', icon: 'gears', screen: 'WallScreen'},
         {title: 'Chamados Tasy - Cadastros', icon: 'user', screen: 'TasyCadScreen'},
-        {title: 'Chamados Tasy - TI', icon: 'windows', screen: 'TasyTIScreen'},
+        {title: 'Chamados Tasy - TI', icon: 'windows', screen: 'TasyTIScreen'}
     ];
     const HandleLogoutBtn = async () =>{
         dispatch({type:'SET_TOKEN', payload: {token: ''}});
@@ -100,7 +104,7 @@ export default (props) =>{
             </DrawerLogoArea>
             <DrawerScroller>
                 {menus.map((item, index)=>(
-                    <MenuButton key={index}>
+                    <MenuButton key={index} onPress={()=>navigation.navigate(item.screen, {screen: item.screen})}>
                         <MenuSquare></MenuSquare>
                         <Icon name={item.icon} size={20} color={'#666E78'} />
                         <MenuButtonText>{item.title}</MenuButtonText>

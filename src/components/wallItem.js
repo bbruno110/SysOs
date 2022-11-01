@@ -1,11 +1,15 @@
 import React, {useState} from 'react';
 import { Alert } from 'react-native';
 import styled from 'styled-components/native';
+import { useNavigation, useRoute, useNavigationState } from '@react-navigation/native'; 
 import { useStateValue } from '../Context/StateContext';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import api from '../services/api'
+import TasyTIScreen from '../Page/TasyTIScreen';
+import AboutScreen from '../Page/AboutScreen';
+import WallScreen from '../Page/WallScreen';
 
-const Box = styled.View `
+const Box = styled.TouchableOpacity `
     backgroun-color: #FFF;
     border-width: 2px;
     border-color: #E8E9ED;
@@ -59,7 +63,10 @@ const UserText = styled.Text`
 
 export default ({data}) =>{
     const [context, dispatch] = useStateValue();
-
+    const navigation = useNavigation();
+    const state = useNavigationState(state => state);
+    const routeName = (state.routeNames[state.index]);
+    const route = useRoute();
     const [nm_user, setnm_user] = useState(data.usuarioCham);
     
     const Atend = async () => {
@@ -84,15 +91,13 @@ export default ({data}) =>{
         }
         else
         {
-            Alert.alert('Deseja atender este chamado?',"",
+            Alert.alert('Deseja finalizar este chamado?',"",
             [
                 {
                     text:"Sim",
                     onPress:async()=>
                     {
-                        setnm_user(context.user.user);
-                        const result = await api.AtenderChamado(data.nrSequency);
-                        setnm_user(result.nm_user)
+                        navigation.navigate('AboutScreen',{ nrSequency:data.nrSequency, dano: data.dsDanoObs, screen: routeName})
                     },
                 },
                 {
@@ -101,16 +106,16 @@ export default ({data}) =>{
             ]
             )
         }
-    }
+    };
     return(
-        <Box>
+        <Box onPress={Atend}>
             <HeaderArea>
                 {nm_user == null ? 
                     <Icon name="user" size={30} color="#67D4D1" />
                     :  <Icon name="user" size={30} color="#F68080" />
                 }
                 <InfoArea>
-                    <Title>{data.nrSequency} -{data.dsDano}</Title>
+                    <Title >{data.nrSequency} - {data.dsDano}</Title>
                     <Date>{data.dtServico}</Date>
                     <UserText>
                         Atendido por : {nm_user}
@@ -122,7 +127,7 @@ export default ({data}) =>{
             </Body>
             <LikeText>{data.setoUsuario}</LikeText>
             <FooterArea>
-                <LikeButton onPress={Atend}>
+                <LikeButton >
                     {nm_user == null ? 
                         <Icon name="tag" size={17} color="#67D4D1" /> 
                         :  <Icon name="tag" size={17} color="#F68080" />

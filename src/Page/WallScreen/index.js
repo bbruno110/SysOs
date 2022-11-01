@@ -18,7 +18,7 @@ export default () =>{
         });
         Chamados_Desenv();
     },[]);
-
+    const errorForStackTracer = new Error();
     const Chamados_Desenv = async () =>{
         setListChamados([]);
         setLoading(true);
@@ -28,7 +28,7 @@ export default () =>{
     };
 
     return(
-        <C.Container>  
+        <C.Container>
             {!loading && listChamados.length === 0 &&
                 <C.NoListArea>
                     <C.NoListText>Não Há Chamados</C.NoListText>

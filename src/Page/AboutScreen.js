@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput,Alert } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useStateValue } from '../Context/StateContext';
@@ -7,26 +7,27 @@ import WallScreen from '../Page/WallScreen/';
 import TasyTIScreen from '../Page/TasyTIScreen';
 import api from '../services/api';
 
-function AboutScreen(props){
+export default (props) =>{
     const navigation = useNavigation();
     const route = useRoute();
     const nrSequency = props.route.params.nrSequency;
     const [dsTecnico, onChangeText] = React.useState('');
     const [context, dispatch] = useStateValue();
-    navigation.setOptions({
-        headerShown: false,
-        headerTitle: 'Finalizar OS',
-        headerTitleStyle:{
-            width: 500,
-            color: '#cbd1d8'
-        },
-        headerStyle:{ 
-            backgroundColor: '#07142E', 
-            shadowOpacity: 0, 
-            elevation: 0,
-        },
-        
-    });
+    useEffect(()=>{
+        navigation.setOptions({
+            headerShown: false,
+            headerTitle: 'Finalizar OS',
+            headerTitleStyle:{
+                width: 500,
+                color: '#cbd1d8'
+            },
+            headerStyle:{ 
+                backgroundColor: '#07142E', 
+                shadowOpacity: 0, 
+                elevation: 0,
+            },
+        });
+    },[]);
     const back = async () =>{
         navigation.navigate(props.route.params.screen)
     };
@@ -35,6 +36,7 @@ function AboutScreen(props){
         {
             const result = await api.FinalizarChamado(nrSequency, dsTecnico);
             onChangeText('');
+            navigation.navigate(props.route.params.screen)
            
         }
         else{
@@ -131,5 +133,3 @@ const styles = StyleSheet.create({
         borderRadius: 20
     }
 });
-
-export default AboutScreen;

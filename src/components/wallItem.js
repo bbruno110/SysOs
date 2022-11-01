@@ -4,10 +4,7 @@ import styled from 'styled-components/native';
 import { useNavigation, useRoute, useNavigationState } from '@react-navigation/native'; 
 import { useStateValue } from '../Context/StateContext';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import api from '../services/api'
-import TasyTIScreen from '../Page/TasyTIScreen';
-import AboutScreen from '../Page/AboutScreen';
-import WallScreen from '../Page/WallScreen';
+import api from '../services/api';
 
 const Box = styled.TouchableOpacity `
     backgroun-color: #FFF;

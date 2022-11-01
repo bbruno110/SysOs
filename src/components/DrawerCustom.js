@@ -104,7 +104,7 @@ export default (props) =>{
             </DrawerLogoArea>
             <DrawerScroller>
                 {menus.map((item, index)=>(
-                    <MenuButton key={index} onPress={()=>navigation.navigate(item.screen, {screen: item.screen})}>
+                    <MenuButton key={index} onPress={()=>navigation.navigate(item.screen)}>
                         <MenuSquare></MenuSquare>
                         <Icon name={item.icon} size={20} color={'#666E78'} />
                         <MenuButtonText>{item.title}</MenuButtonText>

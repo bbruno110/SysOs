@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const baseUrl = 'http://192.168.1.22:7000';
+const baseUrl = 'http://192.168.1.22:3000';
 
 const request = async(method, endpoint, params, token)=>{
     method = method.toLowerCase();
@@ -49,6 +49,11 @@ export default {
         let json = await request('get','/list-ti', {}, token);
         return json;
     },
+    MYOS: async() =>{
+        let token = await AsyncStorage.getItem('token');
+        let json = await request('get',`/home`, {}, token);
+        return json;
+    },
     Chamados_CAD: async() =>{
         let token = await AsyncStorage.getItem('token');
         let json = await request('get','/list-cad', {}, token);
@@ -67,6 +72,11 @@ export default {
     FinalizarChamado: async(nrSequency, dsTecnico) =>{
         let token = await AsyncStorage.getItem('token');
         let json = await request('put',`/endOs?nrSequency=${nrSequency}`,{dsTecnico}, token);
+        return json; 
+    },
+    findMyOs: async(descricao) =>{
+        let token = await AsyncStorage.getItem('token');
+        let json = await request('get',`/find?descricao=${descricao}`,{}, token);
         return json; 
     }
 };

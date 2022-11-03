@@ -1,10 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import LinearGradient from 'react-native-linear-gradient';
-import WallScreen from '../Page/WallScreen';
-import { useNavigation } from '@react-navigation/native'
-import TasyTIScreen from '../Page/TasyTIScreen';
-import AboutScreen from '../Page/AboutScreen';
+import { useNavigation } from '@react-navigation/native';
 import { useStateValue } from '../Context/StateContext';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -12,7 +9,7 @@ const DrawerArea = styled.View`
     flex:1;
     background-color: #eafcf7;
 `;
-const DrawerLogoArea = styled.View`
+const DrawerLogoArea = styled.Pressable`
     padding: 10px 20px;
     marginTop: 10px;
     border-bottom-width: 1px;
@@ -85,18 +82,22 @@ export default (props) =>{
     const [context, dispatch] = useStateValue();
     const navigation = useNavigation();
     const menus = [
-        {title: 'Chamados Tasy - Desenvolvimento', icon: 'gears', screen: 'WallScreen'},
+        {title: 'Chamados Tasy - Desenvolvimento', icon: 'gears', screen: 'Chamados_Desen'},
         {title: 'Chamados Tasy - Cadastros', icon: 'user', screen: 'TasyCadScreen'},
-        {title: 'Chamados Tasy - TI', icon: 'windows', screen: 'TasyTIScreen'}
+        {title: 'Chamados Tasy - TI', icon: 'windows', screen: 'TasyTIScreen'},
+        {title: 'Lista de Ramais', icon: 'phone-square', screen: 'Ramais'}
     ];
+
     const HandleLogoutBtn = async () =>{
         dispatch({type:'SET_TOKEN', payload: {token: ''}});
         navigation.reset({index:1, routes:[{name:'PreloadScreen'}]});
     };
-
+    const init = async () =>{
+        navigation.reset({index:2, routes:[{name:'Home'}]})
+    }
     return (
-        <DrawerArea>
-            <DrawerLogoArea>
+        <LinearGradient colors={['#FFF','#8FC1B5']} style={{flex:1}}>
+            <DrawerLogoArea onPress={init}>
                 <DrawerLogo 
                     source={require('../asset/logo100.png')} resizeMode="contain"/>
                     <DrawerTextLogo>Hospital Samur</DrawerTextLogo>
@@ -106,7 +107,12 @@ export default (props) =>{
                 {menus.map((item, index)=>(
                     <MenuButton key={index} onPress={()=>navigation.navigate(item.screen)}>
                         <MenuSquare></MenuSquare>
-                        <Icon name={item.icon} size={20} color={'#666E78'} />
+
+                        <Icon 
+                        name={item.icon} 
+                        size={20}
+                        color={'#666E78'}
+                        />
                         <MenuButtonText>{item.title}</MenuButtonText>
                     </MenuButton>
                 ))}
@@ -121,6 +127,6 @@ export default (props) =>{
                     <Icon name="arrow-circle-o-left" size={24} color="#666E78" onPress={HandleLogoutBtn}/>
                 </FooterUnitButton>
             </FooterArea>
-        </DrawerArea>
+        </LinearGradient>
     );
 }

@@ -1,9 +1,10 @@
 import React, {useEffect} from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput,Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput,Alert, Image } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useStateValue } from '../Context/StateContext';
 import LinearGradient from 'react-native-linear-gradient';
-import WallScreen from '../Page/WallScreen/';
+import Home from './Home';
+import Chamados_Desen from '../Page/Chamados_Desen';
 import TasyTIScreen from '../Page/TasyTIScreen';
 import api from '../services/api';
 
@@ -30,15 +31,16 @@ export default (props) =>{
         });
     },[]);
     const back = async () =>{
-        navigation.navigate(props.route.params.screen)
+        navigation.reset({index:2, routes:[{name:'Home'}]})
     };
     const update = async () =>{
         if(dsTecnico)
         {
             const result = await api.FinalizarChamado(nrSequency, dsTecnico);
             onChangeText('');
+            Alert.alert('Chamado encerrado!','')
             /*navigation.navigate(props.route.params.screen)*/
-            navigation.reset({index:2, routes:[{name:'MainDrawer'}]})
+            navigation.reset({index:2, routes:[{name:'Home'}]})
            
         }
         else{
@@ -47,12 +49,17 @@ export default (props) =>{
     }
     return(
         <LinearGradient colors={['#07142E', '#003478', '#005688']} style={styles.container}>
+            <Image 
+                source={require('../asset/Logot.png')} 
+                style={styles.imagem}
+            />
             <Text style={styles.txts }>Descrição do dano</Text>
             <TextInput 
                 style={styles.txtInput1} 
                 value={props.route.params.dano} 
                 textAlignVertical= 'top'
-                editable={false} 
+                editable={false}
+                multiline
                 selectTextOnFocus={false}
             ></TextInput>
             <Text style={styles.txts }>OS n°{nrSequency}</Text>
@@ -90,19 +97,25 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems:'center',
     },
+    imagem:{
+        width:80,
+        height:100,
+        resizeMode:'stretch',
+        opacity: 0.05
+    },
     txtInput1:{
         width:250,
-        height: 200,
+        height: 100,
         padding:10,
         fontSize:15,
         color: '#000',
         marginBottom: 15,
         backgroundColor:'#647884',
-        borderRadius: 20
+        borderRadius: 5
     },
     txtInput:{
         width:250,
-        height: 200,
+        height: 175,
         padding:10,
         fontSize:16,
         color: '#000',
@@ -115,7 +128,7 @@ const styles = StyleSheet.create({
         color:'#cbd1d8'
     },
     button:{
-        backgroundColor: "#007566",
+        backgroundColor: "#1B6E2A",
         width:150,
         alignItems:'center',
         height: 50,
@@ -125,7 +138,7 @@ const styles = StyleSheet.create({
         borderRadius: 20
     },
     buttonCancel:{
-        backgroundColor: "#8FC1B5",
+        backgroundColor: "#a0bcb5",
         width:150,
         marginTop: 3,
         alignItems:'center',

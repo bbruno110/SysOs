@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput, Alert} from 'react-native';
 import { connect } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { useStateValue } from '../Context/StateContext';
@@ -27,12 +27,12 @@ function Login(){
             }
             else
             {
-                alert(result.error);
+                Alert.alert(result.error, '');
             }
         }
         else
         {
-            alert("Preencha os campos!")
+            Alert.alert("Preencha os campos!",'')
         }
     }
 

@@ -111,6 +111,7 @@ export default ({data}) =>{
                     <Icon name="user" size={30} color="#67D4D1" />
                     :  <Icon name="user" size={30} color="#F68080" />
                 }
+                
                 <InfoArea>
                     <Title >{data.nrSequency} - {data.dsDano}</Title>
                     <Date>{data.dtServico}</Date>

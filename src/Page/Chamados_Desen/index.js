@@ -11,14 +11,13 @@ export default () =>{
     const [context,dispatch] = useStateValue();
     const [loading, setLoading] = useState(true);
     const [listChamados, setListChamados] = useState([]);
-    
     useEffect(()=>{
         navigation.setOptions({
             headerTitle: 'Chamados Tasy - Desenvolvimento'
         });
         Chamados_Desenv();
     },[]);
-    const errorForStackTracer = new Error();
+
     const Chamados_Desenv = async () =>{
         setListChamados([]);
         setLoading(true);
@@ -26,7 +25,6 @@ export default () =>{
         setLoading(false);
         setListChamados(result.chamados)
     };
-
     return(
         <C.Container>
             {!loading && listChamados.length === 0 &&

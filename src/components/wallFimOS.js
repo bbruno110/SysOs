@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import { Alert } from 'react-native';
+import format from 'date-fns/format';
 import styled from 'styled-components/native';
 import { useNavigation, useRoute, useNavigationState } from '@react-navigation/native'; 
 import { useStateValue } from '../Context/StateContext';
@@ -61,8 +62,6 @@ const UserText = styled.Text`
 export default ({data}) =>{
     const [context, dispatch] = useStateValue();
     const navigation = useNavigation();
-    const state = useNavigationState(state => state);
-    const routeName = (state.routeNames[state.index]);
     const route = useRoute();
     const [nm_user, setnm_user] = useState(data.usuarioCham);
     const page = context.user.screen;
@@ -110,6 +109,16 @@ export default ({data}) =>{
                 )
             }
         }
+        else
+        {
+            Alert.alert(`Informação OS n°: ${data.nrSequency}`,
+                    `Data de Abertura: ${data.dtServico}
+Data de Inicio: ${data.dtInicio}
+Data de Finalização: ${data.dtFim}
+Solução: ${data.dsSolucao} 
+                    `
+            )
+        }
     };
     return(
         <Box onPress={Atend}>
@@ -121,9 +130,9 @@ export default ({data}) =>{
                 
                 <InfoArea>
                     <Title >{data.nrSequency} - {data.dsDano}</Title>
-                    <Date>{data.dtServico}</Date>
+                    <Date>Ínicio: {data.dtServico} - Fim: {data.dtFim} - Duração: {data.tempo}</Date>
                     <UserText>
-                        Atendido por : {nm_user}
+                        Atendido por : {nm_user}   Avaliação: {data.avaliacao}
                     </UserText>
                 </InfoArea>
             </HeaderArea>

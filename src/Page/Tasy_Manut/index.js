@@ -2,8 +2,9 @@ import { useNavigation, useIsFocused } from "@react-navigation/native";
 import React, { useState, useEffect } from "react";
 import { useStateValue } from "../../Context/StateContext";
 import api from '../../services/api';
-import C from './style';
 import WallItem from '../../components/WallItem';
+import C from './style';
+
 
 
 export default () =>{
@@ -13,25 +14,25 @@ export default () =>{
     const [listChamados, setListChamados] = useState([]);
     const IsFocused = useIsFocused();
     useEffect(()=>{
-        if(IsFocused)
-        {
-            Chamados_Desenv();
+        if(IsFocused){
+            Cham_man();
         }
-
         navigation.setOptions({
-            headerTitle: 'Chamados Tasy - Desenvolvimento'
+            headerTitle: 'Chamados Tasy - Manutenção'
         });
+        
     },[IsFocused]);
 
-    const Chamados_Desenv = async () =>{
+    const Cham_man = async () =>{
         setListChamados([]);
         setLoading(true);
-        const result = await api.Chamados_Desenvolvimento();
+        const result = await api.Chamados_Manut();
         setLoading(false);
         setListChamados(result.chamados)
     };
+
     return(
-        <C.Container>
+        <C.Container>  
             {!loading && listChamados.length === 0 &&
                 <C.NoListArea>
                     <C.NoListText>Não Há Chamados</C.NoListText>
@@ -39,7 +40,7 @@ export default () =>{
             }
             <C.List 
                 data={listChamados} 
-                onRefresh={Chamados_Desenv}
+                onRefresh={Cham_man}
                 refreshing={loading}
                 renderItem={({item})=><WallItem data={item}/>} 
                 keyExtractor={(item)=>item.nrSequency.toString()}

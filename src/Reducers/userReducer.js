@@ -3,7 +3,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const initalState = {
     token:'',
     user:{},
-    nrSequency: ''
+    nrGrupo:'',
+    nrSequency: '',
+    Descricao:'',
+    screen: 'Home'
 };
 export default(state= initalState, action = {}) =>{
 
@@ -17,6 +20,15 @@ export default(state= initalState, action = {}) =>{
         break;
         case 'SET_nrSequency':
             return {...state,nrSequency:action.payload.nrSequency};
+        break;
+        case 'SET_GROUP':
+            return {...state,nrGrupo:action.payload.nrGrupo};
+        break;
+        case 'SET_Descricao':
+            return {...state,Descricao:action.payload.Descricao};
+        break;
+        case 'SET_PAGE':
+            return {...state,screen:action.payload.screen};
         break;
     }
 

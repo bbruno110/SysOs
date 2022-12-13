@@ -1,4 +1,4 @@
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 import React, { useState, useEffect } from "react";
 import { useStateValue } from "../../Context/StateContext";
 import api from '../../services/api';
@@ -12,12 +12,16 @@ export default () =>{
     const [descricao, setDescricao] = useState('');
     const [loading, setLoading] = useState(true);
     const [listChamados, setListChamados] = useState([]);
+    const IsFocused = useIsFocused();
     useEffect(()=>{
+        if(IsFocused){
+            MYOS();
+            dispatch({type:'SET_PAGE', payload: {screen: 'Home'}})
+        }
         navigation.setOptions({
             headerTitle: 'Página Inicial - Minhas OS'
         });
-        MYOS();
-    },[]);
+    },[IsFocused]);
 
     const MYOS = async () =>{
         setListChamados([]);

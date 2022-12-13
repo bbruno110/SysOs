@@ -7,6 +7,10 @@ import TasyCadScreen from '../Page/TasyCadScreen';
 import AboutScreen from '../Page/AboutScreen';
 import Chamados_Desen from '../Page/Chamados_Desen';
 import Ramais from '../Page/Ramais';
+import Tasy_Manut from '../Page/Tasy_Manut';
+import Historicos from '../Page/Historicos';
+import novoHistorico from '../Page/novoHistorico';
+import Os_end from '../Page/OS_END/Os_end';
 
 const Drawer = createDrawerNavigator();
 
@@ -44,12 +48,28 @@ export default () =>{
                 component={TasyCadScreen}
             />
             <Drawer.Screen 
+                name="Tasy_Manut"
+                component={Tasy_Manut}
+            />
+            <Drawer.Screen 
                 name="Ramais"
                 component={Ramais}
             />
             <Drawer.Screen 
                 name="AboutScreen"
                 component={AboutScreen}
+            />
+            <Drawer.Screen 
+                name="Historicos"
+                component={Historicos}
+            />
+            <Drawer.Screen 
+                name="novoHistorico"
+                component={novoHistorico}
+            />
+            <Drawer.Screen 
+                name='OS_END'
+                component={Os_end}
             />
         </Drawer.Navigator>
     );

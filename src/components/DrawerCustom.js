@@ -81,19 +81,35 @@ const MenuButtonText = styled.Text`
 export default (props) =>{
     const [context, dispatch] = useStateValue();
     const navigation = useNavigation();
-    const menus = [
-        {title: 'Chamados Tasy - Desenvolvimento', icon: 'gears', screen: 'Chamados_Desen'},
-        {title: 'Chamados Tasy - Cadastros', icon: 'user', screen: 'TasyCadScreen'},
-        {title: 'Chamados Tasy - TI', icon: 'windows', screen: 'TasyTIScreen'},
-        {title: 'Lista de Ramais', icon: 'phone-square', screen: 'Ramais'}
-    ];
+    const grupo = context.user.nrGrupo ;
+    let menus;
+    if(grupo=== 2)
+    {
+        menus = [
+            {title: 'Chamados Tasy - Manuteção', icon: 'gears', screen: 'Tasy_Manut'},
+            {title: 'Lista de Ramais', icon: 'phone-square', screen: 'Ramais'}
+        ];
+    }
+    else
+    {
+        menus = [
+            {title: 'Chamados Tasy - Desenvolvimento', icon: 'gears', screen: 'Chamados_Desen'},
+            {title: 'Chamados Tasy - Cadastros', icon: 'user', screen: 'TasyCadScreen'},
+            {title: 'Chamados Tasy - TI', icon: 'windows', screen: 'TasyTIScreen'},
+            {title: 'Lista de Ramais', icon: 'phone-square', screen: 'Ramais'},
+            {title: 'Meus Chamados - Atendidos', icon: 'bar-chart', screen: 'OS_END'}
+        ];
+    }
 
     const HandleLogoutBtn = async () =>{
         dispatch({type:'SET_TOKEN', payload: {token: ''}});
+        dispatch({type:'SET_PAGE', payload: {screen: ''}});
         navigation.reset({index:1, routes:[{name:'PreloadScreen'}]});
+
     };
     const init = async () =>{
-        navigation.reset({index:2, routes:[{name:'Home'}]})
+        navigation.reset({index:2, routes:[{name:'Home'}]});
+        dispatch({type:'SET_PAGE', payload: {screen: 'Home'}})
     }
     return (
         <LinearGradient colors={['#FFF','#8FC1B5']} style={{flex:1}}>
@@ -105,7 +121,7 @@ export default (props) =>{
             </DrawerLogoArea>
             <DrawerScroller>
                 {menus.map((item, index)=>(
-                    <MenuButton key={index} onPress={()=>navigation.navigate(item.screen)}>
+                    <MenuButton key={index} onPress={()=>navigation.navigate(item.screen, dispatch({type:'SET_PAGE', payload: {screen: item.screen}}))}>
                         <MenuSquare></MenuSquare>
 
                         <Icon 

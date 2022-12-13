@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const baseUrl = 'http://192.168.1.22:3000';
+const baseUrl = 'http://192.168.1.22:5000';
 
 const request = async(method, endpoint, params, token)=>{
     method = method.toLowerCase();
@@ -78,5 +78,25 @@ export default {
         let token = await AsyncStorage.getItem('token');
         let json = await request('get',`/find?descricao=${descricao}`,{}, token);
         return json; 
-    }
+    },
+    Chamados_Manut: async() =>{
+        let token = await AsyncStorage.getItem('token');
+        let json = await request('get','/List-Manut', {}, token);
+        return json;
+    },
+    Listhit: async(nrSequency) =>{
+        let token = await AsyncStorage.getItem('token');
+        let json = await request('get',`/listhist?nrSequency=${nrSequency}`, {}, token);
+        return json;
+    },
+    Novohit: async(nrSequency, dsTecnico) =>{
+        let token = await AsyncStorage.getItem('token');
+        let json = await request('post',`/hist?nrSequency=${nrSequency}`, {dsTecnico}, token);
+        return json;
+    },
+    osFinished: async(dateInitial, dateEnd, nrGrupo) =>{
+        let token = await AsyncStorage.getItem('token');
+        let json = await request('post',`/os_finished`,{dateInitial,dateEnd, nrGrupo},token);
+        return json;
+    },
 };

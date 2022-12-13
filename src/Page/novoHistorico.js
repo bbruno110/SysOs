@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput,Alert, Image, Button } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute, useIsFocused } from '@react-navigation/native';
 import { useStateValue } from '../Context/StateContext';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -17,12 +17,10 @@ export default (props) =>{
     const [context, dispatch] = useStateValue();
     const nrSequency = context.user.nrSequency;
     const Descricao = context.user.Descricao;
-    const page = context.user.screen;
-    useEffect(()=>{
 
+    useEffect(()=>{
         navigation.setOptions({
-            headerShown: true,
-            headerRight: () =>  <TouchableOpacity style={styles.headerButton} onPress={next} ><Text style={{fontSize: 18, color:'#FFF', marginLeft: 10}}>Históricos </Text><Icon name="chevron-right" size={24} color="#cbd1d8" /></TouchableOpacity>,
+            headerShown: false,
             headerTitle: '',
             headerTitleStyle:{
                 width: 500,
@@ -39,20 +37,18 @@ export default (props) =>{
         navigation.navigate('Historicos')
     };
     const back = async () =>{
-        navigation.navigate(page)
         dispatch({type: 'SET_nrSequency', payload:{nrSequency: ''}});
         dispatch({type: 'SET_Descricao', payload:{Descricao: ''}});
-        onChangeText('');
-        
+        navigation.reset({index:3, routes:[{name:'Home'}]})
     };
     const update = async () =>{
         if(dsTecnico)
         {
-            const result = await api.FinalizarChamado(nrSequency, dsTecnico);
+            const result = await api.Novohit(nrSequency, dsTecnico);
             onChangeText('');
-            Alert.alert('Chamado encerrado!','')
+            Alert.alert('Histórico Liberado!','')
             /*navigation.navigate(props.route.params.screen)*/
-            navigation.navigate(page)
+            navigation.navigate('Historicos')
            
         }
         else{
@@ -61,6 +57,9 @@ export default (props) =>{
     }
     return(
         <LinearGradient colors={['#07142E', '#003478', '#005688']} style={styles.container}>
+            <Text style={{color: '#b8bfc6', fontSize: 28}}>
+                Histórico
+            </Text>
             <Image 
                 source={require('../asset/Logot.png')} 
                 style={styles.imagem}
@@ -83,21 +82,21 @@ export default (props) =>{
                 onChangeText={text => onChangeText(text)}
                 value={dsTecnico}
                 textAlignVertical= 'top'
-                maxLength={350}
+                maxLength={2000}
                 editable
                 placeholder="Descreva a solução para esta OS!" 
                 placeholderTextColor="#161b22"
             >
             </TextInput>
         
-            <Text style={{color: '#b8bfc6', left: -54}}>
-                Maximo de {350 - dsTecnico.length} caracteres.
+            <Text style={{color: '#b8bfc6', marginLeft: -90}}>
+                Maximo de {2000 - dsTecnico.length} caracteres.
             </Text>
             <View  style={styles.t} >
                 <TouchableOpacity style={styles.button} onPress={update}>
-                    <Text style={{fontSize: 24, fontWeight:'bold', color:'#FFF'}}>Finalizar</Text>
+                    <Text style={{fontSize: 24, fontWeight:'bold', color:'#FFF'}}>Liberar</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.buttonCancel} onPress={back} >
+                <TouchableOpacity style={styles.buttonCancel} onPress={next} >
                     <Text style={{fontSize: 24, fontWeight:'bold', color:'#FFF'}}>Cancelar</Text>
                 </TouchableOpacity>
             </View>
@@ -138,7 +137,7 @@ const styles = StyleSheet.create({
         padding:10,
         fontSize:16,
         color: '#000',
-        backgroundColor:'rgba(203,209,216, 0.5)',
+        backgroundColor:'#cbd1d8',
         borderRadius: 10
     },
     txts:{

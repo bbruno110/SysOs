@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Alert } from 'react-native';
+import { Alert, Linking } from 'react-native';
 import styled from 'styled-components/native';
 import { useNavigation, useRoute, useNavigationState } from '@react-navigation/native'; 
 import { useStateValue } from '../Context/StateContext';
@@ -14,7 +14,7 @@ const Box = styled.View `
     padding: 15px;
     margin-bottom: 10px;
 `;
-const HeaderArea = styled.View`
+const HeaderArea = styled.TouchableOpacity`
     flex-direction: row;
     align-items: center;
 `;
@@ -64,7 +64,7 @@ export default ({data}) =>{
     
     return(
         <Box>
-            <HeaderArea>
+            <HeaderArea  onPress={()=>{ Linking.openURL(`tel:${'0772102'+data.ramal}`)}}>
                     <Icon name="volume-control-phone" size={30} color="#67D4D1" />
                 <InfoArea>
                     <Title >{data.setor}</Title>

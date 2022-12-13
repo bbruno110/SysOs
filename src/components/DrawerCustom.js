@@ -86,7 +86,7 @@ export default (props) =>{
     if(grupo=== 2)
     {
         menus = [
-            {title: 'Chamados Tasy - Manuteção', icon: 'gears', screen: 'Tasy_Manut'},
+            {title: 'Chamados Tasy - Manuteção', icon: 'wrench', screen: 'Tasy_Manut'},
             {title: 'Lista de Ramais', icon: 'phone-square', screen: 'Ramais'}
         ];
     }

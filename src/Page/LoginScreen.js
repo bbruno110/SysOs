@@ -40,13 +40,21 @@ function Login(){
         if(nmUser && dsSenha)
         {
             let result = await api.login(nmUser, dsSenha);
+
             if(result.error === "")
             {
                 dispatch({type: 'SET_TOKEN', payload:{token: result.token}});
                 dispatch({type: 'SET_NAME', payload:{user: result.user}});
                 dispatch({type:'SET_PAGE', payload: {screen: 'Home'}})
                 dispatch({type: 'SET_GROUP', payload:{nrGrupo: result.nrGrupo}});
-                navigation.reset({index:2, routes:[{name:'MainDrawer'}]})
+                
+                if(result.nrGrupo === 3)
+                {
+                    navigation.reset({index:3, routes:[{name:'TabNavigator'}]})
+                }
+                else{
+                    navigation.reset({index:2, routes:[{name:'MainDrawer'}]})
+                }
             }
             else
             {

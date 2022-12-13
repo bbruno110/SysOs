@@ -2,8 +2,8 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import PreloadScreen from '../Page/PreloadScreen/index'
 import Login from '../Page/LoginScreen';
-import AboutScreen from '../Page/AboutScreen'
 import MainDrawer from './MainDrawer';
+import TabNavigator from './TabNavigator';
 const Stack = createStackNavigator();
 
 export default () =>{
@@ -22,6 +22,11 @@ export default () =>{
             <Stack.Screen
                 name="MainDrawer"
                 component={MainDrawer}
+                options={{headerShown:false}}
+            />
+            <Stack.Screen
+                name="TabNavigator"
+                component={TabNavigator}
                 options={{headerShown:false}}
             />
         </Stack.Navigator>

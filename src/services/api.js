@@ -99,4 +99,19 @@ export default {
         let json = await request('post',`/os_finished`,{dateInitial,dateEnd, nrGrupo},token);
         return json;
     },
+    osDesen: async(ClassSel, ParadSel, PrioSel, dsdano, dsDescrib) =>{
+        let token = await AsyncStorage.getItem('token');
+        let json = await request('post','/os-desen',{ClassSel,ParadSel,PrioSel,dsdano,dsDescrib},token);
+        return json;
+    },
+    osCad: async(ClassSel, ParadSel, PrioSel, dsdano, dsDescrib) =>{
+        let token = await AsyncStorage.getItem('token');
+        let json = await request('post','/os-cad',{ClassSel,ParadSel,PrioSel,dsdano,dsDescrib},token);
+        return json;
+    },
+    osOpenUser: async() =>{
+        let token = await AsyncStorage.getItem('token');
+        let json = await request('get','/homeUser',{}, token);
+        return json; 
+    },
 };

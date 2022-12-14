@@ -3,8 +3,7 @@ import styled from "styled-components/native";
 export default {
     Container: styled.View`
         flex:1;
-        background-color: #BFBFBF;
-        width: 350px;
+        background-color: #FFF;
         pading: 20px;
     `,
     LoadingIcon: styled.ActivityIndicator``,
@@ -56,6 +55,11 @@ export default {
     align-items: center;    
     justify-content: center;
     `,
+    caixat: styled.View`
+    flex-direction: row;   
+    align-content: space-around;
+    marginBottom: 5px;
+    `,
     caixa: styled.View`
     align-items: flex-start;
     marginTop: 10px;
@@ -90,5 +94,29 @@ export default {
     txtGeral : styled.Text`
     font-size: 16px;
     color: #4f4f4f;
+    `,
+    Aberto: styled.View`
+    flex-direction: row;   
+    width:15px;
+    height:15px;
+    borderRadius: 15px;
+    border: 10px solid;
+    border-color: #E8E9ED;
+    `,
+    Atendimento: styled.View`
+    flex-direction: row;   
+    width:15px;
+    height:15px;
+    borderRadius: 15px;
+    border: 10px solid;
+    border-color: yellow;
+    `,
+    Fechado: styled.View`
+    flex-direction: row;   
+    width:15px;
+    height:15px;
+    borderRadius: 15px;
+    border: 10px solid;
+    border-color: red;
     `,
 };

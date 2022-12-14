@@ -15,7 +15,11 @@ export default (props) =>{
     const [context,dispatch] = useStateValue();
     const [loading, setLoading] = useState(true);
     const nrSequency = context.user.nrSequency;
-    const [selected, setSelected] = useState("");
+    const [dsdano, onChangeDano] = React.useState('');
+    const [dsDescrib, onChangeText] = React.useState('');
+    const [ClassSel, setClassSel] = useState("");
+    const [PrioSel, setPrioSel] = useState("");
+    const [ParadSel, setParadSel] = useState("");
     const [modaTilVisible, setModaTilVisible] = useState(false);
     const [ListHistorico, setListHistorico] = useState([]);
     const IsFocused = useIsFocused();
@@ -93,11 +97,42 @@ export default (props) =>{
         }
     ]
     const data = [
-        {key:'1', value:'Defeito'},
-        {key:'2', value:'Dúvida'},
-        {key:'3', value:'Solicitação'},
-        {key:'4', value:'Sugestão'}
+        {key:'E', value:'Defeito'},
+        {key:'D', value:'Dúvida'},
+        {key:'S', value:'Solicitação'},
+        {key:'T', value:'Sugestão'}
     ]
+    const Situacao = [
+        {key:'N', value:'Não'},
+        {key:'P', value:'Parcialmente'},
+        {key:'S', value:'Sim'}
+    ]
+    const Prioridade = [
+        {key:'E', value:'Emergência'},
+        {key:'U', value:'Urgente'},
+        {key:'A', value:'Alta'},
+        {key:'M', value:'Média'},
+        {key:'B', value:'Baixa'},
+        {key:'S', value:'Sem prioridade'}
+    ]
+    const back = async () =>{
+        setClassSel("");
+        setPrioSel("");
+        setParadSel("");
+        onChangeDano("");
+        onChangeText("");
+        setModaTilVisible(false)
+    }
+    const send = async () =>{
+        if(!ClassSel || !PrioSel || !ParadSel || !dsDescrib || !dsdano)
+        {
+            alert("Por favor preencha os campos!")
+        }
+        else{
+            back();
+        }
+
+    }
     return(
         <LinearGradient colors={['#0d2556', '#003478', '#005688']} style={styles.container}>
             <FlashMessage position={"top"}></FlashMessage>
@@ -110,23 +145,82 @@ export default (props) =>{
                         setModaTilVisible(!modaTilVisible);
                         }}
                 >
-                    <C.tiArea>
-                        <C.NoListText>testete</C.NoListText>
-                        <SelectList  
-                            setSelected={(val) => setSelected(val)}
-                            data={data} 
-                            placeholder="Selecione a Classificação"
-                            maxHeight={120}
-                            search={false}
-                            inputStyles={{color:'black', width:150}}
-                            dropdownItemStyles={{marginHorizontal:10}}
-                            dropdownTextStyles={{color: 'black'}}
-                            save="value"
-                        />
-                    </C.tiArea>
-                    <C.goBack
-                        onPress={() => setModaTilVisible(false)}
-                    ><C.Textb>Voltar</C.Textb></C.goBack>
+                    <C.tiAreafull>
+                        <C.tiArea>
+                            <C.caixa>
+                                <C.textoCaixa>Classificação</C.textoCaixa>
+                                <SelectList  
+                                    setSelected={(val) => setClassSel(val)}
+                                    data={data} 
+                                    placeholder="Selecione a Classificação"
+                                    maxHeight={120}
+                                    search={false}
+                                    inputStyles={{color:'black', width:100, fontSize: 14}}
+                                    dropdownItemStyles={{marginHorizontal:10}}
+                                    dropdownTextStyles={{color: 'black', fontSize: 14}}
+                                    save="value"
+                                />
+                            </C.caixa>
+                            <C.caixa>
+                                <C.textoCaixa>Parado</C.textoCaixa>
+                                <SelectList  
+                                    setSelected={(val) => setParadSel(val)}
+                                    data={Situacao} 
+                                    placeholder="Selecione a Situação"
+                                    maxHeight={120}
+                                    search={false}
+                                    inputStyles={{color:'black', width:100, fontSize: 14}}
+                                    dropdownItemStyles={{marginHorizontal:10}}
+                                    dropdownTextStyles={{color: 'black', fontSize: 14}}
+                                    save="value"
+                                />
+                            </C.caixa>
+                        </C.tiArea>
+                        <C.tiArea>
+                            <C.caixa>
+                                <C.textoCaixa>Prioridade</C.textoCaixa>
+                                <SelectList  
+                                    setSelected={(val) => setPrioSel(val)}
+                                    data={Prioridade} 
+                                    placeholder="Prioridade"
+                                    maxHeight={120}
+                                    search={false}
+                                    inputStyles={{color:'black', width:100, fontSize: 14}}
+                                    dropdownItemStyles={{marginHorizontal:10}}
+                                    dropdownTextStyles={{color: 'black', fontSize: 14}}
+                                    save="value"
+                                />
+                            </C.caixa>
+                            <C.txtUser editable={false}>{context.user.user}</C.txtUser>
+                        </C.tiArea>
+                        <C.caixa>
+                            <C.txtGeral>Dano</C.txtGeral>
+                            <C.txtDano maxLength={42} value={dsdano} onChangeText={text => onChangeDano(text)}></C.txtDano>
+                        </C.caixa>
+                        <C.caixa>
+                            <C.txtGeral>Descrição</C.txtGeral>
+                            <C.txtDano 
+                                multiline 
+                                numberOfLines={4} 
+                                onChangeText={text => onChangeText(text)}
+                                value={dsDescrib}
+                                textAlignVertical= 'top'
+                                maxLength={350}
+                                editable
+                            ></C.txtDano>
+                            <Text style={{color: '#b8bfc6'}}>
+                                Maximo de {350 - dsDescrib.length} caracteres.
+                            </Text>
+                        </C.caixa>
+                    </C.tiAreafull>
+                    <C.caixar>
+                        <C.goBack
+                            onPress={back}
+                        ><C.Textb>Voltar</C.Textb></C.goBack>
+                        <C.goBack
+                            onPress={send}
+                        ><C.Textb>Enviar</C.Textb></C.goBack>
+                    </C.caixar>
                 </C.TiModal>
                                 
             </C.Container>

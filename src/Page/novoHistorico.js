@@ -44,7 +44,7 @@ export default (props) =>{
     const update = async () =>{
         if(dsTecnico)
         {
-            const result = await api.Novohit(nrSequency, dsTecnico);
+            const result = await api.Novohit(nrSequency, dsTecnico, 5);
             onChangeText('');
             Alert.alert('Histórico Liberado!','')
             /*navigation.navigate(props.route.params.screen)*/

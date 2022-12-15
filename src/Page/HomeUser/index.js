@@ -1,4 +1,4 @@
-import { useNavigation, useIsFocused } from "@react-navigation/native";
+import { useNavigation, useIsFocused, useFocusEffect } from "@react-navigation/native";
 import React, { useState, useEffect } from "react";
 import { Text, StyleSheet, TouchableOpacity } from 'react-native';
 import FlashMessage from 'react-native-flash-message';
@@ -29,10 +29,11 @@ export default (props) =>{
     const [modaDesenlVisible, setModaDesenlVisible] = useState(false);
     const [modaManVisible, setModManVisible] = useState(false);
     const [ListOs, setListOS] = useState([]);
+    const [Listwa, setListWa] = useState([]);
     const IsFocused = useIsFocused();
     useEffect(()=>{
         if(IsFocused){
-            os();
+            os();     
         }
         navigation.setOptions({
             headerStyle:{ 
@@ -56,8 +57,29 @@ export default (props) =>{
         setListOS([]);
         setLoading(true);
         const results = await api.osOpenUser();
+        const wa = await api.osOpenUserwa();
+        setListOS(results.chamados);
+        setListWa(wa);
+        filter();
         setLoading(false);
-        setListOS(results)
+    }
+    const filter = async()=>{
+        /*const res = ListOs.find(obj =>{
+            return obj.status === '3';
+        })
+        */
+       alert(JSON.stringify(Listwa))
+        if(Listwa === '3'){
+            Alert.alert('Avaliação', 'Existe um chamado finalizado, que precisa ser avaliado!')
+        }
+    /*  let unique =[];
+        ie.forEach(el =>{
+            if(!unique.includes(el)){
+                unique.push(el)
+            }
+        })
+        return unique;
+    */
     }
     const actions = [
         {
@@ -181,7 +203,7 @@ export default (props) =>{
             <FlashMessage position={"top"}></FlashMessage>
             <C.Container>  
                 <C.List
-                        data={ListOs} 
+                        data={ListOs}
                         onRefresh={os}
                         refreshing={loading}
                         renderItem={({item})=><WallUser data={item}/>} 
@@ -583,6 +605,7 @@ export default (props) =>{
             <FloatingAction
                 actions={actions}
                 position={"right"}
+                onPressMain={filter}
                 onPressItem={name => {
                     switch(name){
                             case 'bt_logOut' :

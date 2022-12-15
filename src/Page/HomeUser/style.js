@@ -27,10 +27,10 @@ export default {
         flex: 1;
     `,
     TiModal: styled.Modal`
-    
     `,
     tiAreafull: styled.View`
     margin: 5px;
+    border: 3px solid;
     backgroundColor: #FFF;
     borderRadius: 20px;
     padding: 25px;
@@ -109,7 +109,7 @@ export default {
     height:15px;
     borderRadius: 15px;
     border: 10px solid;
-    border-color: yellow;
+    border-color: #d3d89c;
     `,
     Fechado: styled.View`
     flex-direction: row;   
@@ -117,6 +117,6 @@ export default {
     height:15px;
     borderRadius: 15px;
     border: 10px solid;
-    border-color: red;
+    border-color: #ffadad;
     `,
 };

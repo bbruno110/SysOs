@@ -89,9 +89,9 @@ export default {
         let json = await request('get',`/listhist?nrSequency=${nrSequency}`, {}, token);
         return json;
     },
-    Novohit: async(nrSequency, dsTecnico) =>{
+    Novohit: async(nrSequency, dsTecnico, tipo) =>{
         let token = await AsyncStorage.getItem('token');
-        let json = await request('post',`/hist?nrSequency=${nrSequency}`, {dsTecnico}, token);
+        let json = await request('post',`/hist?nrSequency=${nrSequency}`, {dsTecnico,tipo}, token);
         return json;
     },
     osFinished: async(dateInitial, dateEnd, nrGrupo) =>{
@@ -112,6 +112,16 @@ export default {
     osOpenUser: async() =>{
         let token = await AsyncStorage.getItem('token');
         let json = await request('get','/homeUser',{}, token);
+        return json; 
+    },
+    osOpenUserwa: async() =>{
+        let token = await AsyncStorage.getItem('token');
+        let json = await request('get','/wa',{}, token);
+        return json; 
+    },
+    RatingOS: async(nrSequency, rating) =>{
+        let token = await AsyncStorage.getItem('token');
+        let json = await request('put',`/rating?nrSequency=${nrSequency}&rating=${rating}`,{}, token);
         return json; 
     },
 };

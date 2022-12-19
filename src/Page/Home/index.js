@@ -1,5 +1,6 @@
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 import React, { useState, useEffect } from "react";
+import { Dimensions } from 'react-native';
 import { useStateValue } from "../../Context/StateContext";
 import api from '../../services/api';
 import C from './style';
@@ -16,12 +17,13 @@ export default () =>{
     useEffect(()=>{
         if(IsFocused){
             MYOS();
+
             dispatch({type:'SET_PAGE', payload: {screen: 'Home'}})
         }
         navigation.setOptions({
             headerTitle: 'Página Inicial - Minhas OS'
         });
-    },[IsFocused]);
+    },[IsFocused, Dimensions.get("screen").height, Dimensions.get("screen").width]);
 
     const MYOS = async () =>{
         setListChamados([]);

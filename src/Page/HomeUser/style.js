@@ -1,4 +1,8 @@
 import styled from "styled-components/native";
+import { Dimensions } from 'react-native';
+
+const widthScreen = Dimensions.get("screen").width;
+const heightScreen =  Dimensions.get("screen").height;
 
 export default {
     Container: styled.View`
@@ -30,6 +34,7 @@ export default {
     `,
     tiAreafull: styled.View`
     margin: 5px;
+    align-items: center;   
     border: 3px solid;
     backgroundColor: #FFF;
     borderRadius: 20px;
@@ -96,17 +101,17 @@ export default {
     color: #4f4f4f;
     `,
     Aberto: styled.View`
-    flex-direction: row;   
+    flex-direction: row;  
     width:15px;
     height:15px;
-    borderRadius: 15px;
+    borderRadius: 10px;
     border: 10px solid;
     border-color: #E8E9ED;
     `,
     Atendimento: styled.View`
     flex-direction: row;   
     width:15px;
-    height:15px;
+    height:10px;
     borderRadius: 15px;
     border: 10px solid;
     border-color: #d3d89c;

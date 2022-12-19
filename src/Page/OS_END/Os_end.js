@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import C from './style';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { StyleSheet, FlatList, View, TouchableOpacity, Text, Alert } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
-import { useEffect } from 'react';
+import { Dimensions } from 'react-native';
 import CalendarPicker from 'react-native-calendar-picker';
 import LinearGradient from 'react-native-linear-gradient';
 import api from '../../services/api';
@@ -64,7 +64,7 @@ export default () =>{
                 elevation: 0,
             }
         });
-    },[IsFocused])
+    },[IsFocused, Dimensions.get("screen").height, Dimensions.get("screen").width])
 
     const OS_fim = async () =>{
         {ti ? setcheck.push(22) : setcheck.indexOf(22)}
@@ -74,40 +74,69 @@ export default () =>{
         setListChamados([]);
         setLoading(true);
         const result = await api.osFinished(dateInitial, dateEnd, setcheck);
-        if(result.chamados.count == 0)
+        if(result.error == "")
         {
-            Alert.alert("Sem registros","",
-                [
-                    {
-                        text: "Ok",
-                        onPress:async()=>
+            if(result.chamados.count == 0)
+            {
+                Alert.alert("Sem registros","",
+                    [
                         {
-                            setBgColor('transparent');
-                            setListChamados([]);
-                            setCountMY('');
-                            setModalVisible(true);
-                            setSelectedStartDate('');
-                            setSelectedEndDate('');
-                            setCountAll('');
-                            setTI(false);
-                            setCad(false);
-                            setDesen(false);
-                            setMAN(false);
-                            setcheck.length = 0;
-                            setLoading(false);
-                            setModalVisible(true);
+                            text: "Ok",
+                            onPress:async()=>
+                            {
+                                setBgColor('transparent');
+                                setListChamados([]);
+                                setCountMY('');
+                                setModalVisible(true);
+                                setSelectedStartDate('');
+                                setSelectedEndDate('');
+                                setCountAll('');
+                                setTI(false);
+                                setCad(false);
+                                setDesen(false);
+                                setMAN(false);
+                                setcheck.length = 0;
+                                setLoading(false);
+                                setModalVisible(true);
+                            }
                         }
-                    }
-                ]
+                    ]
+                )
+    
+            }else
+            {
+                setLoading(false);
+                setBgColor('#FFF');
+                setListChamados(result.chamados.rows)
+                setCountMY(result.chamados.count);
+                setCountAll(result.conta);
+            }
+        }
+        else{
+            Alert.alert("Sem registros","",
+                    [
+                        {
+                            text: "Ok",
+                            onPress:async()=>
+                            {
+                                setBgColor('transparent');
+                                setListChamados([]);
+                                setCountMY('');
+                                setModalVisible(true);
+                                setSelectedStartDate('');
+                                setSelectedEndDate('');
+                                setCountAll('');
+                                setTI(false);
+                                setCad(false);
+                                setDesen(false);
+                                setMAN(false);
+                                setcheck.length = 0;
+                                setLoading(false);
+                                setModalVisible(true);
+                            }
+                        }
+                    ]
             )
-
-        }else
-        {
-            setLoading(false);
-            setBgColor('#FFF');
-            setListChamados(result.chamados.rows)
-            setCountMY(result.chamados.count);
-            setCountAll(result.conta);
         }
 
     };

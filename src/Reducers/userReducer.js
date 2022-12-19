@@ -6,7 +6,10 @@ const initalState = {
     nrGrupo:'',
     nrSequency: '',
     Descricao:'',
-    screen: 'Home'
+    screen: 'Home',
+    login: '',
+    password: '',
+    remember: 'false'
 };
 export default(state= initalState, action = {}) =>{
 
@@ -29,6 +32,18 @@ export default(state= initalState, action = {}) =>{
         break;
         case 'SET_PAGE':
             return {...state,screen:action.payload.screen};
+        break;
+        case 'SET_LOGIN':
+            AsyncStorage.setItem('login', action.payload.login);
+            return {...state,login:action.payload.login};
+        break;
+        case 'SET_PASSWORD':
+            AsyncStorage.setItem('password', action.payload.password);
+            return {...state,password:action.payload.password};
+        break;
+        case 'SET_REMEMBER':
+            AsyncStorage.setItem('remember', action.payload.remember);
+            return {...state,remember:action.payload.remember};
         break;
     }
 

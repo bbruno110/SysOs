@@ -7,7 +7,12 @@ import { useStateValue } from '../Context/StateContext';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { View } from 'react-native';
 import api from '../services/api';
+import { Dimensions } from 'react-native';
 import { useEffect } from 'react';
+
+
+const widthScreen = Dimensions.get("screen").width;
+const heightScreen =  Dimensions.get("screen").height;
 
 const Box = styled.TouchableOpacity `
     background-color: #FFF;
@@ -74,6 +79,7 @@ export default ({data}) =>{
     const [mod, setmod] = useState(false);
     const [nm_user, setnm_user] = useState(data.usuarioCham);
     const page = context.user.screen;
+    const grupo = context.user.nrGrupo ;
     const [dsTecnico, onChangeText] = React.useState('');
     const Atend = async () => {
         switch(data.status){
@@ -113,6 +119,7 @@ export default ({data}) =>{
     }
     const star_corner = 'https://raw.githubusercontent.com/tranhonghan/images/main/star_corner.png';
     const star_filled = 'https://raw.githubusercontent.com/tranhonghan/images/main/star_filled.png';
+    
     const send = async() =>{
         if(defaultRating === 0)
         {
@@ -134,8 +141,22 @@ export default ({data}) =>{
                         setmod(false);
                         setInput(false);
                         onChangeText('');
-                        alert('Chamado finalizado com sucesso!')
-                        navigation.navigate({index:3, routes:[{name:'TabNavigator'}]})
+                        Alert.alert('Chamado finalizado com sucesso!',"",
+                        [
+                            {
+                                text:"ok",
+                                onPress:async()=>
+                                {
+                                    if(grupo=== 3){
+                                    navigation.reset({index:3, routes:[{name:'TabNavigator'}]})
+                                    }
+                                    else{
+                                        navigation.reset({index:2, routes:[{name:'MainDrawer'}]})
+                                    }
+                                },
+                            }
+                        ]
+                        )
                     }
                     else{
                         alert('Ocorreu um erro contate o Administrador!')
@@ -151,8 +172,23 @@ export default ({data}) =>{
                 {
                     setDefaultRating(0);
                     setmod(false);
-                    alert('Chamado finalizado com sucesso!')
-                    navigation.reset({index:3, routes:[{name:'TabNavigator'}]})
+                    Alert.alert('Chamado finalizado com sucesso!',"",
+                    [
+                        {
+                            text:"ok",
+                            onPress:async()=>
+                            {
+                                if(grupo=== 3){
+                                    navigation.reset({index:3, routes:[{name:'TabNavigator'}]})
+                                    }
+                                    else{
+                                        navigation.reset({index:2, routes:[{name:'MainDrawer'}]})
+                                    }
+                            },
+                        }
+                    ]
+                    )
+                    
                 }
                 else{
                     alert('Ocorreu um erro contate o Administrador!')
@@ -215,6 +251,8 @@ export default ({data}) =>{
                     borderWidth: 4,
                     borderRadius: 20,
                     padding: 15,
+                    marginLeft: 3,
+                    marginRight: 3,
                     marginBottom: 10,
                     borderColor: `${color(data.status)}`,
                 }}
@@ -258,13 +296,22 @@ export default ({data}) =>{
                 style={{
                     backgroundColor: '#FFF',
                     borderWidth: 4,
+                    marginLeft: 20,
+                    marginRight: 20,
                     borderRadius: 20,
                     padding: 15,
                     marginBottom: 10,
                     borderColor: `${color(data.status)}`,
                 }}>
                     <InfoArea>
-                        <Title >Avalie a Resolução do chamado</Title>
+                        <Text
+                            style={{
+                                fontSize: 17,
+                                color: '#000',
+                                fontWeight: 'bold',
+                                marginLeft: 52
+                            }}
+                        >Avalie a resolução do chamado</Text>
                     </InfoArea>
                     <CustomRatingBar/>
                     {input ? 
@@ -289,7 +336,9 @@ export default ({data}) =>{
                         width:100,
                         justifyContent: 'center',
                         alignContent: 'center',
-                        height: 25,
+                        marginTop: 20,
+                        marginLeft: 123,
+                        height: 35,
                         borderRadius: 10
                     }}
                     onPress={send}
@@ -307,8 +356,10 @@ export default ({data}) =>{
 const styles = StyleSheet.create({
     customRatingBarStyle:{
         justifyContent: 'center',
+        alignItems: 'center',
+        alignContent: 'center',
         flexDirection: 'row',
-        marginTop: 30
+        marginTop: 25
     },
     starImageStyle:{
         width: 40,

@@ -1,4 +1,5 @@
 import React from 'react';
+import { View, ScrollView } from 'react-native';
 import styled from 'styled-components/native';
 import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
@@ -29,21 +30,6 @@ const DrawerLogo = styled.Image``;
 const DrawerScroller = styled.ScrollView`
     flex:1;
     margin: 20px 0;
-`;
-const ChangeUnitArea = styled.View`
-    margin: 10px;
-`;
-const ChangeUnitButton = styled.TouchableOpacity`
-    background-color: #1B6E2A;
-    padding:12px;
-    justify-content: center;
-    align-items: center;
-    border-radius: 5px;
-`;
-const ChangeUnitButtonText = styled.Text`
-    color: #FFF;
-    font-size: 15px;
-    font-weight: bold;
 `;
 const FooterArea = styled.View`
     padding: 20px;
@@ -83,23 +69,37 @@ export default (props) =>{
     const navigation = useNavigation();
     const grupo = context.user.nrGrupo ;
     let menus;
-    if(grupo=== 2)
-    {
-        menus = [
-            {title: 'Chamados Tasy - Manuteção', icon: 'wrench', screen: 'Tasy_Manut'},
-            {title: 'Lista de Ramais', icon: 'phone-square', screen: 'Ramais'}
-        ];
+    switch(grupo){
+        case 2:
+            menus = [
+                {title: 'Chamados Tasy - Manuteção', icon: 'wrench', screen: 'Tasy_Manut'},
+                {title: 'Abrir Chamado', icon: 'file-text-o', screen: 'HomeUser'},
+                {title: 'Lista de Ramais', icon: 'phone-square', screen: 'Ramais'}
+            ];
+        break;
+        case 1:
+            menus = [
+                {title: 'Chamados Tasy - Desenvolvimento', icon: 'gears', screen: 'Chamados_Desen'},
+                {title: 'Chamados Tasy - Cadastros', icon: 'user', screen: 'TasyCadScreen'},
+                {title: 'Chamados Tasy - TI', icon: 'windows', screen: 'TasyTIScreen'},
+                {title: 'Lista de Ramais', icon: 'phone-square', screen: 'Ramais'},
+                {title: 'Abrir Chamado', icon: 'file-text-o', screen: 'HomeUser'},
+                {title: 'Meus Chamados - Atendidos', icon: 'bar-chart', screen: 'OS_END'}
+            ];
+        break;
+        case 4:
+            menus = [
+                {title: 'Chamados Tasy - Desenvolvimento', icon: 'gears', screen: 'Chamados_Desen'},
+                {title: 'Chamados Tasy - Cadastros', icon: 'user', screen: 'TasyCadScreen'},
+                {title: 'Chamados Tasy - TI', icon: 'windows', screen: 'TasyTIScreen'},
+                {title: 'Lista de Ramais', icon: 'phone-square', screen: 'Ramais'},
+                {title: 'Abrir Chamado', icon: 'file-text-o', screen: 'HomeUser'},
+                {title: 'Chamados Tasy - Manuteção', icon: 'wrench', screen: 'Tasy_Manut'},
+                {title: 'Meus Chamados - Atendidos', icon: 'bar-chart', screen: 'OS_END'}
+            ];
+        break;
     }
-    else
-    {
-        menus = [
-            {title: 'Chamados Tasy - Desenvolvimento', icon: 'gears', screen: 'Chamados_Desen'},
-            {title: 'Chamados Tasy - Cadastros', icon: 'user', screen: 'TasyCadScreen'},
-            {title: 'Chamados Tasy - TI', icon: 'windows', screen: 'TasyTIScreen'},
-            {title: 'Lista de Ramais', icon: 'phone-square', screen: 'Ramais'},
-            {title: 'Meus Chamados - Atendidos', icon: 'bar-chart', screen: 'OS_END'}
-        ];
-    }
+
 
     const HandleLogoutBtn = async () =>{
         dispatch({type:'SET_TOKEN', payload: {token: ''}});
@@ -119,7 +119,15 @@ export default (props) =>{
                     <DrawerTextLogo>Hospital Samur</DrawerTextLogo>
                     <Drawerspace></Drawerspace>
             </DrawerLogoArea>
-            <DrawerScroller>
+            <ScrollView
+                width={350}
+                style={{
+                    width: '100%',
+                    flexGrow:1,
+                    margin: 10,
+                    marginLeft: 0
+                }}
+            >
                 {menus.map((item, index)=>(
                     <MenuButton key={index} onPress={()=>navigation.navigate(item.screen, dispatch({type:'SET_PAGE', payload: {screen: item.screen}}))}>
                         <MenuSquare></MenuSquare>
@@ -132,7 +140,7 @@ export default (props) =>{
                         <MenuButtonText>{item.title}</MenuButtonText>
                     </MenuButton>
                 ))}
-            </DrawerScroller>
+            </ScrollView>
             <FooterArea>
                 <FooterInfo>
                     <FooterProfile>

@@ -1,9 +1,10 @@
 import { useNavigation, useIsFocused, useFocusEffect } from "@react-navigation/native";
 import React, { useState, useEffect } from "react";
 import { Text, StyleSheet, TouchableOpacity } from 'react-native';
-import FlashMessage from 'react-native-flash-message';
+import FlashMessage, {showMessage} from 'react-native-flash-message';
 import { useStateValue } from "../../Context/StateContext";
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { Dimensions } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { FloatingAction } from "react-native-floating-action";
 import C from './style';
@@ -12,6 +13,7 @@ import { Alert } from "react-native";
 import api from "../../services/api";
 import WallUser from "../../components/WallUser";
 import { View } from "react-native";
+import { TextInput } from "react-native";
 
 export default (props) =>{
     const navigation = useNavigation();
@@ -29,61 +31,115 @@ export default (props) =>{
     const [modaDesenlVisible, setModaDesenlVisible] = useState(false);
     const [modaManVisible, setModManVisible] = useState(false);
     const [ListOs, setListOS] = useState([]);
+    const [botm, setBotm] = useState([]);
     const [Listwa, setListWa] = useState([]);
+    const [seleEquip, setSelEquip] = useState([]);
+    const [dataEquip, setdataEquip] = useState([]);
+    const [seleLoccal, setseleLoccal] = useState([]);
+    const [dataLocal, setdataLocal] = useState([]);
+    const grupo = context.user.nrGrupo ;
     const IsFocused = useIsFocused();
+    const widthScreen = Dimensions.get("screen").width;
+    const heightScreen =  Dimensions.get("screen").height;
     useEffect(()=>{
         if(IsFocused){
-            os();     
+            os();   
         }
-        navigation.setOptions({
-            headerStyle:{ 
-                backgroundColor: '#091c42', 
-                shadowOpacity: 0, 
-                elevation: 0,
-                height: 55,
-            },
-            headerTitleAlign: "center",
-            headerTitle: 'Página Inicial',
-            headerTitleStyle:{
-                //width: 500,
-                //fontWeight: 'bold',
-                fontSize: 22,
-                color: '#CCC'
-            }
-        });
-       
-    },[ IsFocused]);
+        if(grupo=== 3){
+            navigation.setOptions({
+                headerStyle:{ 
+                    backgroundColor: '#091c42', 
+                    shadowOpacity: 0, 
+                    elevation: 0,
+                    height: 55,
+                },
+                headerTitleAlign: "center",
+                headerTitle: 'Página Inicial',
+                headerTitleStyle:{
+                    //width: 500,
+                    //fontWeight: 'bold',
+                    fontSize: 22,
+                    color: '#CCC'
+                }
+            });
+        }
+        else{
+            navigation.setOptions({
+                headerTintColor: '#CCC',
+                headerStyle:{ 
+                    backgroundColor: '#091c42', 
+                    shadowOpacity: 0, 
+                    elevation: 0,
+                    height: 55,
+                },
+                headerTitleAlign: "center",
+                headerTitle: 'Chamados Abertos',
+                headerTitleStyle:{
+                    //width: 500,
+                    //fontWeight: 'bold',
+                    fontSize: 22,
+                    color: '#CCC'
+                }
+            });
+        }
+    },[ IsFocused, Dimensions.get("screen").height, Dimensions.get("screen").width]);
     const os = async () =>{
         setListOS([]);
+        setListWa([]);
         setLoading(true);
         const results = await api.osOpenUser();
         const wa = await api.osOpenUserwa();
         setListOS(results.chamados);
-        setListWa(wa);
-        filter();
+        const re = parseInt(wa.map((item)=> {return item.ie}))
+        //alert(JSON.stringify(re))
+        if(re == 3){
+            showMessage({
+                message: "Existe um chamado finalizado, que precisa ser avaliado!",
+                type: 'danger',
+                duration: 1000
+            })
+            //Alert.alert('Avaliação', 'Existe um chamado finalizado, que precisa ser avaliado!')
+            setListWa(wa.map((item)=> {return item.ie}));
+        }
         setLoading(false);
     }
-    const filter = async()=>{
-        /*const res = ListOs.find(obj =>{
-            return obj.status === '3';
+    const equip = async () =>{
+        setseleLoccal([]);
+        setdataLocal([]);
+        let local = await api.localizacao();
+        let arr = local.map((item)=>{
+            return {key: item.nrSequency, value: item.dsLocalizacao}
         })
-        */
-       alert(JSON.stringify(Listwa))
-        if(Listwa === '3'){
-            Alert.alert('Avaliação', 'Existe um chamado finalizado, que precisa ser avaliado!')
-        }
-    /*  let unique =[];
-        ie.forEach(el =>{
-            if(!unique.includes(el)){
-                unique.push(el)
-            }
-        })
-        return unique;
-    */
+        setdataLocal(arr)
     }
-    const actions = [
+    const selectLocate = async (data) =>{
+        setSelEquip([]);
+        setdataEquip([]);
+        setseleLoccal(data);
+    }
+    const lEquip = async () =>{
+        setSelEquip([]);
+        setdataEquip([]);
+        let equip = await api.Equip(seleLoccal);
+        let arr1 = equip.map((item)=>{
+            return {key: item.nrSequency, value: item.dsEquipamento}
+        })
+        setdataEquip(arr1)
+    }
+    const filter = async()=>{
+        let t = parseInt(Listwa)
+        if(t === 3){
+            showMessage({
+                message: "Existe um chamado finalizado, que precisa ser avaliado!",
+                type: 'danger',
+                duration: 1000
+            })
+           //Alert.alert('Avaliação', 'Existe um chamado finalizado, que precisa ser avaliado!')
+        }
+    }
+    const act1 = [
         {
-            text: 'LogOut',
+            text: 'Sair',
             icon: <Icon 
                 name={'arrow-circle-right'} 
                 size={18}
@@ -93,7 +149,7 @@ export default (props) =>{
             position: 20,
         },
         {
-            text: 'Chamados TI',
+            text: 'Chamados TI (Técnico)',
             icon: <Icon 
                 name={'windows'} 
                 size={18}
@@ -103,7 +159,49 @@ export default (props) =>{
             position: 1,
         },
         {
-            text: 'Chamados Tasy',
+            text: 'Chamados Tasy (Desenvolvimento)',
+            icon: <Icon 
+                name={'gears'} 
+                size={18}
+                color={'#CCC'}
+            />,
+            name: "bt_osDesen",
+            position: 2,
+        },
+        {
+            text: 'Chamados Cadastro (Tasy)',
+            icon: <Icon 
+                name={'user'} 
+                size={18}
+                color={'#CCC'}
+            />,
+            name: "bt_osCad",
+            position: 3,
+        },
+        {
+            text: 'Chamados Manutenção',
+            icon: <Icon 
+                name={'wrench'} 
+                size={18}
+                color={'#CCC'}
+            />,
+            name: "bt_osManut",
+            position: 4,
+        }
+    ]
+    const act2 = [
+        {
+            text: 'Chamados TI (Técnico)',
+            icon: <Icon 
+                name={'windows'} 
+                size={18}
+                color={'#CCC'}
+            />,
+            name: "bt_osTI",
+            position: 1,
+        },
+        {
+            text: 'Chamados Tasy (Desenvolvimento)',
             icon: <Icon 
                 name={'gears'} 
                 size={18}
@@ -155,6 +253,10 @@ export default (props) =>{
     const back = async () =>{
         os();
         setClassSel("");
+        setSelEquip([]);
+        setdataEquip([]);
+        setseleLoccal([]);
+        setdataLocal([]);
         setPrioSel("");
         setParadSel("");
         onChangeDano("");
@@ -198,10 +300,49 @@ export default (props) =>{
         }
 
     }
+    const sendTiMan = async () =>{
+
+        if(!ClassSel || !PrioSel || !ParadSel || !dsDescrib || !dsdano || seleLoccal === "" || seleEquip === "")
+        {
+            alert("Por favor preencha os campos!")
+        }
+        else{
+            switch(ieOS){
+                case 'Man':
+                    const result = await api.osMat(ClassSel,ParadSel,PrioSel,dsdano,dsDescrib,seleLoccal,seleEquip);
+                    if(result.error)
+                    {
+                        alert(JSON.stringify(result.error))
+                        alert(JSON.stringify([ClassSel,ParadSel,PrioSel,dsdano,dsDescrib,seleLoccal,seleEquip]))
+                    }
+                    else{
+                        Alert.alert(`Chamado Aberto`, `Chamado Aberto para a Manutenção. n°${result.seq}`)
+                        back();
+                    }
+                break;
+                case 'Ti':
+                    const resultCad = await api.osTI(ClassSel,ParadSel,PrioSel,dsdano,dsDescrib,seleLoccal,seleEquip);
+                    if(resultCad.error)
+                    {
+                        alert(JSON.stringify(resultCad.error))
+                    }
+                    else{
+                        Alert.alert(`Chamado Aberto`, `Chamado Aberto para TI. n°${resultCad.seq}`)
+                        back();
+                    }
+                break;
+            }
+        }
+
+    }
     return(
         <LinearGradient colors={['#0d2556', '#003478', '#005688']} style={styles.container}>
             <FlashMessage position={"top"}></FlashMessage>
-            <C.Container>  
+            <View style={{
+                 width: widthScreen * 0.95,
+                 flex: 1,
+                 backgroundColor: "#FFF",
+            }}>  
                 <C.List
                         data={ListOs}
                         onRefresh={os}
@@ -248,7 +389,7 @@ export default (props) =>{
                                     placeholder="Selecione a Situação"
                                     maxHeight={120}
                                     search={false}
-                                    inputStyles={{color:'black', width:100, fontSize: 14}}
+                                    inputStyles={{color:'black', width: widthScreen * 0.25 , fontSize: 14}}
                                     dropdownItemStyles={{marginHorizontal:10}}
                                     dropdownTextStyles={{color: 'black', fontSize: 14}}
                                     save="key"
@@ -264,7 +405,7 @@ export default (props) =>{
                                     placeholder="Prioridade"
                                     maxHeight={120}
                                     search={false}
-                                    inputStyles={{color:'black', width:100, fontSize: 14}}
+                                    inputStyles={{color:'black', width: widthScreen * 0.25 , fontSize: 14}}
                                     dropdownItemStyles={{marginHorizontal:10}}
                                     dropdownTextStyles={{color: 'black', fontSize: 14}}
                                     save="key"
@@ -272,13 +413,68 @@ export default (props) =>{
                             </C.caixa>
                             <C.txtUser editable={false}>{context.user.user}</C.txtUser>
                         </C.tiArea>
+                        <C.tiArea>
+                            <C.caixa>
+                                <C.textoCaixa>Localização</C.textoCaixa>
+                                <SelectList  
+                                    setSelected={(val)=> {
+                                        selectLocate(val)
+                                    }}
+                                    onSelect={() => lEquip()}
+                                    data={dataLocal} 
+                                    placeholder="Localizacao"
+                                    maxHeight={120}
+                                    search={true}
+                                    inputStyles={{color:'black', width: widthScreen * 0.25 , fontSize: 14}}
+                                    dropdownStyles={{width: widthScreen * 0.40}}
+                                    dropdownItemStyles={{marginHorizontal:10}}
+                                    dropdownTextStyles={{color: 'black', fontSize: 14}}
+                                    save="key"
+                                />
+                            </C.caixa>
+                            <C.caixa>
+                                <C.textoCaixa>Equipamento</C.textoCaixa>
+                                <SelectList  
+                                    setSelected={(val) => setSelEquip(val)}
+                                    data={
+                                        dataEquip
+                                    } 
+                                    placeholder="Equipamento"
+                                    maxHeight={120}
+                                    search={true}
+                                    dropdownItemStyles={{marginHorizontal:10}}
+                                    inputStyles={{color:'black', width: widthScreen * 0.25 , fontSize: 14}}
+                                    dropdownStyles={{width: widthScreen * 0.40}}
+                                    dropdownTextStyles={{color: 'black', fontSize: 14}}
+                                    save="key"
+                                />
+                            </C.caixa>
+                        </C.tiArea>
                         <C.caixa>
                             <C.txtGeral>Dano</C.txtGeral>
-                            <C.txtDano maxLength={42} value={dsdano} onChangeText={text => onChangeDano(text)}></C.txtDano>
+                            <TextInput style={{
+                                width: widthScreen * 0.77,
+                                borderRadius: 5,
+                                fontSize: 18,
+                                fontWeight: "bold",
+                                color: 'black',
+                                borderWidth: 1,
+                                borderStyle: "solid",
+                                backgroundColor: '#f2f2f2'
+                            }} maxLength={42} value={dsdano} onChangeText={text => onChangeDano(text)}></TextInput>
                         </C.caixa>
                         <C.caixa>
                             <C.txtGeral>Descrição</C.txtGeral>
-                            <C.txtDano 
+                            <TextInput style={{
+                                width: widthScreen * 0.77,
+                                borderRadius: 5,
+                                fontSize: 18,
+                                fontWeight: "bold",
+                                color: 'black',
+                                borderWidth: 1,
+                                borderStyle: "solid",
+                                backgroundColor: '#f2f2f2'
+                            }}
                                 multiline 
                                 numberOfLines={4} 
                                 onChangeText={text => onChangeText(text)}
@@ -286,7 +482,7 @@ export default (props) =>{
                                 textAlignVertical= 'top'
                                 maxLength={350}
                                 editable
-                            ></C.txtDano>
+                            ></TextInput>
                             <Text style={{color: '#b8bfc6'}}>
                                 Maximo de {350 - dsDescrib.length} caracteres.
                             </Text>
@@ -297,8 +493,8 @@ export default (props) =>{
                             onPress={back}
                         ><C.Textb>Voltar</C.Textb></C.goBack>
                         <C.goBack
-                            onPress={send}
-                        ><C.Textb>Enviar</C.Textb></C.goBack>
+                            onPress={sendTiMan}
+                        ><C.Textb>Enviar TI</C.Textb></C.goBack>
                     </C.caixar>
                 </C.TiModal>
                 <C.TiModal
@@ -341,7 +537,7 @@ export default (props) =>{
                                     placeholder="Selecione a Situação"
                                     maxHeight={120}
                                     search={false}
-                                    inputStyles={{color:'black', width:100, fontSize: 14}}
+                                    inputStyles={{color:'black', width: widthScreen * 0.25 , fontSize: 14}}
                                     dropdownItemStyles={{marginHorizontal:10}}
                                     dropdownTextStyles={{color: 'black', fontSize: 14}}
                                     save="key"
@@ -357,7 +553,7 @@ export default (props) =>{
                                     placeholder="Prioridade"
                                     maxHeight={120}
                                     search={false}
-                                    inputStyles={{color:'black', width:100, fontSize: 14}}
+                                    inputStyles={{color:'black', width: widthScreen * 0.25 , fontSize: 14}}
                                     dropdownItemStyles={{marginHorizontal:10}}
                                     dropdownTextStyles={{color: 'black', fontSize: 14}}
                                     save="key"
@@ -365,13 +561,68 @@ export default (props) =>{
                             </C.caixa>
                             <C.txtUser editable={false}>{context.user.user}</C.txtUser>
                         </C.tiArea>
+                        <C.tiArea>
+                            <C.caixa>
+                                <C.textoCaixa>Localização</C.textoCaixa>
+                                <SelectList  
+                                    setSelected={(val)=> {
+                                        selectLocate(val)
+                                    }}
+                                    onSelect={() => lEquip()}
+                                    data={dataLocal} 
+                                    placeholder="Localizacao"
+                                    maxHeight={120}
+                                    search={true}
+                                    inputStyles={{color:'black', width: widthScreen * 0.25 , fontSize: 14}}
+                                    dropdownStyles={{width: widthScreen * 0.40}}
+                                    dropdownItemStyles={{marginHorizontal:10}}
+                                    dropdownTextStyles={{color: 'black', fontSize: 14}}
+                                    save="key"
+                                />
+                            </C.caixa>
+                            <C.caixa>
+                                <C.textoCaixa>Equipamento</C.textoCaixa>
+                                <SelectList  
+                                    setSelected={(val) => setSelEquip(val)}
+                                    data={
+                                        dataEquip
+                                    } 
+                                    placeholder="Equipamento"
+                                    maxHeight={120}
+                                    search={true}
+                                    inputStyles={{color:'black', width: widthScreen * 0.25 , fontSize: 14}}
+                                    dropdownStyles={{width: widthScreen * 0.40}}
+                                    dropdownItemStyles={{marginHorizontal:10}}
+                                    dropdownTextStyles={{color: 'black', fontSize: 14}}
+                                    save="key"
+                                />
+                            </C.caixa>
+                        </C.tiArea>
                         <C.caixa>
-                            <C.txtGeral>Dano</C.txtGeral>
-                            <C.txtDano maxLength={42} value={dsdano} onChangeText={text => onChangeDano(text)}></C.txtDano>
+                        <C.txtGeral>Dano</C.txtGeral>
+                            <TextInput style={{
+                                width: widthScreen * 0.77,
+                                borderRadius: 5,
+                                fontSize: 18,
+                                fontWeight: "bold",
+                                color: 'black',
+                                borderWidth: 1,
+                                borderStyle: "solid",
+                                backgroundColor: '#f2f2f2'
+                            }} maxLength={42} value={dsdano} onChangeText={text => onChangeDano(text)}></TextInput>
                         </C.caixa>
                         <C.caixa>
                             <C.txtGeral>Descrição</C.txtGeral>
-                            <C.txtDano 
+                            <TextInput style={{
+                                width: widthScreen * 0.77,
+                                borderRadius: 5,
+                                fontSize: 18,
+                                fontWeight: "bold",
+                                color: 'black',
+                                borderWidth: 1,
+                                borderStyle: "solid",
+                                backgroundColor: '#f2f2f2'
+                            }}
                                 multiline 
                                 numberOfLines={4} 
                                 onChangeText={text => onChangeText(text)}
@@ -379,7 +630,7 @@ export default (props) =>{
                                 textAlignVertical= 'top'
                                 maxLength={350}
                                 editable
-                            ></C.txtDano>
+                            ></TextInput>
                             <Text style={{color: '#b8bfc6'}}>
                                 Maximo de {350 - dsDescrib.length} caracteres.
                             </Text>
@@ -390,7 +641,7 @@ export default (props) =>{
                             onPress={back}
                         ><C.Textb>Voltar</C.Textb></C.goBack>
                         <C.goBack
-                            onPress={send}
+                            onPress={sendTiMan}
                         ><C.Textb>Enviar</C.Textb></C.goBack>
                     </C.caixar>
                 </C.TiModal>
@@ -434,7 +685,7 @@ export default (props) =>{
                                     placeholder="Selecione a Situação"
                                     maxHeight={120}
                                     search={false}
-                                    inputStyles={{color:'black', width:100, fontSize: 14}}
+                                    inputStyles={{color:'black', width: widthScreen * 0.25 , fontSize: 14}}
                                     dropdownItemStyles={{marginHorizontal:10}}
                                     dropdownTextStyles={{color: 'black', fontSize: 14}}
                                     save="key"
@@ -450,7 +701,7 @@ export default (props) =>{
                                     placeholder="Prioridade"
                                     maxHeight={120}
                                     search={false}
-                                    inputStyles={{color:'black', width:100, fontSize: 14}}
+                                    inputStyles={{color:'black', width: widthScreen * 0.25 , fontSize: 14}}
                                     dropdownItemStyles={{marginHorizontal:10}}
                                     dropdownTextStyles={{color: 'black', fontSize: 14}}
                                     save="key"
@@ -459,12 +710,30 @@ export default (props) =>{
                             <C.txtUser editable={false}>{context.user.user}</C.txtUser>
                         </C.tiArea>
                         <C.caixa>
-                            <C.txtGeral>Dano</C.txtGeral>
-                            <C.txtDano maxLength={42} value={dsdano} onChangeText={text => onChangeDano(text)}></C.txtDano>
+                        <C.txtGeral>Dano</C.txtGeral>
+                            <TextInput style={{
+                                width: widthScreen * 0.77,
+                                borderRadius: 5,
+                                fontSize: 18,
+                                fontWeight: "bold",
+                                color: 'black',
+                                borderWidth: 1,
+                                borderStyle: "solid",
+                                backgroundColor: '#f2f2f2'
+                            }} maxLength={42} value={dsdano} onChangeText={text => onChangeDano(text)}></TextInput>
                         </C.caixa>
                         <C.caixa>
                             <C.txtGeral>Descrição</C.txtGeral>
-                            <C.txtDano 
+                            <TextInput style={{
+                                width: widthScreen * 0.77,
+                                borderRadius: 5,
+                                fontSize: 18,
+                                fontWeight: "bold",
+                                color: 'black',
+                                borderWidth: 1,
+                                borderStyle: "solid",
+                                backgroundColor: '#f2f2f2'
+                            }}
                                 multiline 
                                 numberOfLines={4} 
                                 onChangeText={text => onChangeText(text)}
@@ -472,7 +741,7 @@ export default (props) =>{
                                 textAlignVertical= 'top'
                                 maxLength={350}
                                 editable
-                            ></C.txtDano>
+                            ></TextInput>
                             <Text style={{color: '#b8bfc6'}}>
                                 Maximo de {350 - dsDescrib.length} caracteres.
                             </Text>
@@ -527,7 +796,7 @@ export default (props) =>{
                                     placeholder="Selecione a Situação"
                                     maxHeight={120}
                                     search={false}
-                                    inputStyles={{color:'black', width:100, fontSize: 14}}
+                                    inputStyles={{color:'black', width: widthScreen * 0.25 , fontSize: 14}}
                                     dropdownItemStyles={{marginHorizontal:10}}
                                     dropdownTextStyles={{color: 'black', fontSize: 14}}
                                     save="key"
@@ -543,7 +812,7 @@ export default (props) =>{
                                     placeholder="Prioridade"
                                     maxHeight={120}
                                     search={false}
-                                    inputStyles={{color:'black', width:100, fontSize: 14}}
+                                    inputStyles={{color:'black', width: widthScreen * 0.25 , fontSize: 14}}
                                     dropdownItemStyles={{marginHorizontal:10}}
                                     dropdownTextStyles={{color: 'black', fontSize: 14}}
                                     save="key"
@@ -552,12 +821,30 @@ export default (props) =>{
                             <C.txtUser editable={false}>{context.user.user}</C.txtUser>
                         </C.tiArea>
                         <C.caixa>
-                            <C.txtGeral>Dano</C.txtGeral>
-                            <C.txtDano maxLength={42} value={dsdano} onChangeText={text => onChangeDano(text)}></C.txtDano>
+                        <C.txtGeral>Dano</C.txtGeral>
+                            <TextInput style={{
+                                width: widthScreen * 0.77,
+                                borderRadius: 5,
+                                fontSize: 18,
+                                fontWeight: "bold",
+                                color: 'black',
+                                borderWidth: 1,
+                                borderStyle: "solid",
+                                backgroundColor: '#f2f2f2'
+                            }} maxLength={42} value={dsdano} onChangeText={text => onChangeDano(text)}></TextInput>
                         </C.caixa>
                         <C.caixa>
                             <C.txtGeral>Descrição</C.txtGeral>
-                            <C.txtDano 
+                            <TextInput style={{
+                                width: widthScreen * 0.77,
+                                borderRadius: 5,
+                                fontSize: 18,
+                                fontWeight: "bold",
+                                color: 'black',
+                                borderWidth: 1,
+                                borderStyle: "solid",
+                                backgroundColor: '#f2f2f2'
+                            }}
                                 multiline 
                                 numberOfLines={4} 
                                 onChangeText={text => onChangeText(text)}
@@ -565,7 +852,7 @@ export default (props) =>{
                                 textAlignVertical= 'top'
                                 maxLength={350}
                                 editable
-                            ></C.txtDano>
+                            ></TextInput>
                             <Text style={{color: '#b8bfc6'}}>
                                 Maximo de {350 - dsDescrib.length} caracteres.
                             </Text>
@@ -580,7 +867,10 @@ export default (props) =>{
                         ><C.Textb>Enviar</C.Textb></C.goBack>
                     </C.caixar>
                 </C.TiModal> 
-                    <View style={styles.cont}>
+                    <View style={{
+                        padding: widthScreen * 0.04,
+                        marginBottom: 15
+                    }}>
                         <C.caixat>
                             <C.Aberto/><C.textoCaixa> Aberto  </C.textoCaixa>
                             <C.Atendimento/><C.textoCaixa> Em Atendimento  </C.textoCaixa>
@@ -601,9 +891,9 @@ export default (props) =>{
                             <C.textoCaixa> Infra</C.textoCaixa>
                         </C.caixat>
                     </View>                           
-            </C.Container>
+            </View>
             <FloatingAction
-                actions={actions}
+                actions={grupo===3? act1: act2}
                 position={"right"}
                 onPressMain={filter}
                 onPressItem={name => {
@@ -614,7 +904,9 @@ export default (props) =>{
                                 navigation.reset({index:1, routes:[{name:'PreloadScreen'}]});
                             break;
                             case 'bt_osTI':
+                                equip();
                                 setModaTilVisible(true);
+                                setIeOs('Ti')
                             break;
                             case 'bt_osDesen':
                                 setModaDesenlVisible(true);
@@ -625,7 +917,9 @@ export default (props) =>{
                                 setIeOs('cad');
                             break;
                             case 'bt_osManut':
+                                equip();
                                 setModManVisible(true);
+                                setIeOs('Man')
                             break;
                             default: Alert.alert(`selected button: ${name}`);
                         }
@@ -637,7 +931,7 @@ export default (props) =>{
 const styles = StyleSheet.create({
     cont:{
         padding: 30,
-        width: '100%',
+       
     },
     container:{
         flex: 1,
@@ -715,5 +1009,5 @@ const styles = StyleSheet.create({
         marginRight: 5,
         padding: 10,
         borderRadius: 10
-    }
+    },
 });

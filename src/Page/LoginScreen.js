@@ -1,11 +1,12 @@
 import React, {useState, useEffect, useRef } from 'react';
-import { Text, StyleSheet, TouchableOpacity, Image, TextInput, Alert, View, KeyboardAvoidingView} from 'react-native';
+import { Text, StyleSheet, TouchableOpacity, Image, TextInput, Alert, KeyboardAvoidingView,View, Switch} from 'react-native';
 import TouchID from 'react-native-touch-id';
 import { Platform } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { useStateValue } from '../Context/StateContext';
 import LinearGradient from 'react-native-linear-gradient';
 import api from '../services/api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 function Login(){
@@ -15,13 +16,38 @@ function Login(){
     const [nmUser, setName] = useState('');
     const [dsSenha, setPassword] =useState('');
     const [suported, setSuported] = useState(null);
-    /*useEffect(()=>{
-        TouchID.isSupported().then(sucesso=>{
+    const [remember, setRemember] = useState();
+    const IsFocused = useIsFocused();
+    useEffect(()=>{
+        if(IsFocused)
+        {
+            lembrarname();
+            lembrarpass();
+            if(nmUser !== ''){
+                setRemember(false)
+            }
+            else{
+                setRemember(true)
+            }
+            /*switch(rememberME){
+                case 'true':
+                    setPassword(senha);
+                    setName(login);
+                    setRemember(true);
+                break;
+                case 'false':
+                    setPassword('');
+                    setName('');
+                    setRemember(false);
+            }*/
+        }
+        /*TouchID.isSupported().then(sucesso=>{
             setSuported(true);
         }).catch((error)=>{
             console.log("Error: "+ error)
-        })
-    },[]);
+        })*/
+    },[IsFocused]);
+    /*
     const loginTouch = async () =>{
         const config ={
             title: 'Autenticação Requerida',
@@ -43,17 +69,35 @@ function Login(){
 
             if(result.error === "")
             {
-                dispatch({type: 'SET_TOKEN', payload:{token: result.token}});
-                dispatch({type: 'SET_NAME', payload:{user: result.user}});
-                dispatch({type:'SET_PAGE', payload: {screen: 'Home'}})
-                dispatch({type: 'SET_GROUP', payload:{nrGrupo: result.nrGrupo}});
-                
-                if(result.nrGrupo === 3)
-                {
-                    navigation.reset({index:3, routes:[{name:'TabNavigator'}]})
-                }
-                else{
-                    navigation.reset({index:2, routes:[{name:'MainDrawer'}]})
+                switch(remember){
+                    case false:
+                        dispatch({type: 'SET_TOKEN', payload:{token: result.token}});
+                        dispatch({type: 'SET_NAME', payload:{user: result.user}});
+                        dispatch({type:'SET_PAGE', payload: {screen: 'Home'}})
+                        dispatch({type: 'SET_GROUP', payload:{nrGrupo: result.nrGrupo}});
+                        esquecer();
+                        if(result.nrGrupo === 3)
+                        {
+                            navigation.reset({index:3, routes:[{name:'TabNavigator'}]})
+                        }
+                        else{
+                            navigation.reset({index:2, routes:[{name:'MainDrawer'}]})
+                        }
+                    break;
+                    case true:
+                        dispatch({type: 'SET_TOKEN', payload:{token: result.token}});
+                        dispatch({type: 'SET_NAME', payload:{user: result.user}});
+                        dispatch({type:'SET_PAGE', payload: {screen: 'Home'}})
+                        dispatch({type: 'SET_GROUP', payload:{nrGrupo: result.nrGrupo}});
+                        salvar();
+                        if(result.nrGrupo === 3)
+                        {
+                            navigation.reset({index:3, routes:[{name:'TabNavigator'}]})
+                        }
+                        else{
+                            navigation.reset({index:2, routes:[{name:'MainDrawer'}]})
+                        }
+                    break;
                 }
             }
             else
@@ -69,6 +113,53 @@ function Login(){
     const prox = (e)=>{
         let key = e.key
         alert(key)
+    }
+    const togglechange = (value) =>{
+        setRemember(value)
+        switch(value){
+            case true:
+                salvar();
+            break;
+            case false:
+                esquecer();
+            break;
+        }
+
+    }
+    const salvar = async () =>{
+        try{
+            await AsyncStorage.setItem('YOUR-KEY', nmUser)
+            await AsyncStorage.setItem('YOUR-PASS', dsSenha)
+        }
+        catch(error)
+        {
+            alert(JSON.stringify(error))
+        }
+    }
+
+    const lembrarname = async () =>{
+        const username = await AsyncStorage.getItem('YOUR-KEY');
+        if(username !==null)
+        {
+            setName(username)
+        }
+        else{
+            setName('')
+        }
+    }
+    const lembrarpass = async () =>{
+        const pass = await AsyncStorage.getItem('YOUR-PASS')
+        if(pass !==null)
+        {
+            setPassword(pass)
+        }
+        else{
+            setPassword('')
+        }
+    }
+    const esquecer = async()=>{
+        await AsyncStorage.removeItem('YOUR-KEY')
+        await AsyncStorage.removeItem('YOUR-PASS')
     }
     return(
         <LinearGradient colors={['#07142E', '#003478', '#005688']} style={styles.container}>
@@ -102,6 +193,14 @@ function Login(){
                         keyboardType='default'
                     />
                 </KeyboardAvoidingView>
+                <View style={{ flexDirection: 'row' }}>
+                    <Text style={styles.txtfin}>Lembrar-me</Text>
+                    <Switch
+                        value={remember}
+                        onValueChange={(value) => togglechange(value)}
+                    >
+                    </Switch>
+                </View>
                 <TouchableOpacity style={styles.button} onPress={HandleLoginBtn}>
                     <Text style={{fontSize: 24, fontWeight:'bold', color:'#FFF'}}>Entrar</Text>
                 </TouchableOpacity>

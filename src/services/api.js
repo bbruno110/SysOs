@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const baseUrl = 'http://192.168.1.22:5000';
+const baseUrl = 'http://192.168.1.22:80';
 
 const request = async(method, endpoint, params, token)=>{
     method = method.toLowerCase();
@@ -123,5 +123,25 @@ export default {
         let token = await AsyncStorage.getItem('token');
         let json = await request('put',`/rating?nrSequency=${nrSequency}&rating=${rating}`,{}, token);
         return json; 
+    },
+    Equip: async(nrSequency)=>{
+        let token = await AsyncStorage.getItem('token');
+        let json = await request('get', `/equip?nrSequency=${nrSequency}`,{}, token)
+        return json;
+    },
+    localizacao: async()=>{
+        let token = await AsyncStorage.getItem('token');
+        let json = await request('get', `/localizacao`,{}, token)
+        return json;
+    },
+    osTI: async(ClassSel, ParadSel, PrioSel, dsdano, dsDescrib,dsLocalizacao,dsEquipamento) =>{
+        let token = await AsyncStorage.getItem('token');
+        let json = await request('post','/os-ti',{ClassSel,ParadSel,PrioSel,dsdano,dsDescrib,dsLocalizacao,dsEquipamento},token);
+        return json;
+    },
+    osMat: async(ClassSel, ParadSel, PrioSel, dsdano, dsDescrib,dsLocalizacao,dsEquipamento) =>{
+        let token = await AsyncStorage.getItem('token');
+        let json = await request('post','/os-manut',{ClassSel,ParadSel,PrioSel,dsdano,dsDescrib,dsLocalizacao,dsEquipamento},token);
+        return json;
     },
 };

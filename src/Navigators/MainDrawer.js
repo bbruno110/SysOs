@@ -11,6 +11,7 @@ import Tasy_Manut from '../Page/Tasy_Manut';
 import Historicos from '../Page/Historicos';
 import novoHistorico from '../Page/novoHistorico';
 import Os_end from '../Page/OS_END/Os_end';
+import HomeUser from '../Page/HomeUser';
 
 const Drawer = createDrawerNavigator();
 
@@ -70,6 +71,10 @@ export default () =>{
             <Drawer.Screen 
                 name='OS_END'
                 component={Os_end}
+            />
+            <Drawer.Screen
+                name='HomeUser'
+                component={HomeUser}
             />
         </Drawer.Navigator>
     );

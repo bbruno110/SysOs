@@ -24,6 +24,7 @@ export default () =>{
     const [cad, setCad] = useState(false);
     const [desen, setDesen] = useState(false);
     const [man, setMAN] = useState(false);
+    const widthScreen = Dimensions.get("screen").width;
     const [modalVisible, setModalVisible] = useState(true);
     const [countMy, setCountMY] = useState('');
     const [countAll, setCountAll] = useState('');
@@ -197,7 +198,7 @@ export default () =>{
                             todayBackgroundColor="#e8fff3"
                             selectedDayColor="#bacbff"
                             selectedDayTextColor="#000000"
-                            scaleFactor={375}
+                            scaleFactor={widthScreen * 0.9}
                             textStyle={{
                             fontFamily: 'Cochin',
                             color: '#CCC',
@@ -213,7 +214,7 @@ export default () =>{
 
                                 />
                                 <Text
-                                    style={{ marginTop: 7 }}
+                                    style={{ marginTop: 7, color: '#FFF' }}
                                 >Chamados - TI</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={{flexDirection: 'row' }}>
@@ -223,7 +224,7 @@ export default () =>{
                                     onValueChange={(newValue) => setCad(newValue)}
                                 />
                                 <Text
-                                    style={{ marginTop: 7 }}
+                                    style={{ marginTop: 7 , color: '#FFF' }}
                                 >Chamados - CAD</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={{flexDirection: 'row' }}>
@@ -233,7 +234,7 @@ export default () =>{
                                     onValueChange={(newValue) => setDesen(newValue)}
                                 />
                                 <Text
-                                    style={{ marginTop: 7 }}
+                                    style={{ marginTop: 7, color: '#FFF'  }}
                                 >Chamados - DES</Text>
                             </TouchableOpacity>
                         </View>
@@ -244,7 +245,7 @@ export default () =>{
                                     onValueChange={(newValue) => setMAN(newValue)}
                                 />
                                 <Text
-                                    style={{ marginTop: 7 }}
+                                    style={{ marginTop: 7, color: '#FFF'  }}
                                 >Chamados - MAN</Text>
                         </TouchableOpacity>
                         <C.dat>De: {dateInitial}</C.dat>

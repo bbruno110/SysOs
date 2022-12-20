@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, Text, TouchableOpacity, Dimensions } from 'react-native';
 import styled from 'styled-components/native';
 import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
@@ -67,6 +67,7 @@ const MenuButtonText = styled.Text`
 export default (props) =>{
     const [context, dispatch] = useStateValue();
     const navigation = useNavigation();
+    const widthScreen = Dimensions.get("screen").width;
     const grupo = context.user.nrGrupo ;
     let menus;
     switch(grupo){
@@ -137,7 +138,13 @@ export default (props) =>{
                         size={20}
                         color={'#666E78'}
                         />
-                        <MenuButtonText>{item.title}</MenuButtonText>
+                        <Text
+                            style={{
+                                fontSize: widthScreen * 0.0342,
+                                marginLeft: widthScreen * 0.018,
+                                color: '#666E78'
+                            }}
+                        >{item.title}</Text>
                     </MenuButton>
                 ))}
             </ScrollView>

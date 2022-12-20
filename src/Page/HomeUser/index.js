@@ -872,23 +872,43 @@ export default (props) =>{
                         marginBottom: 15
                     }}>
                         <C.caixat>
-                            <C.Aberto/><C.textoCaixa> Aberto  </C.textoCaixa>
-                            <C.Atendimento/><C.textoCaixa> Em Atendimento  </C.textoCaixa>
-                            <C.Fechado/><C.textoCaixa> Necessidade de Avaliação</C.textoCaixa>
+                            <C.Aberto/><Text style={{color: '#4f4f4f',fontSize: widthScreen * 0.032}}> Aberto  </Text>
+                            <C.Atendimento/><Text style={{color: '#4f4f4f',fontSize: widthScreen * 0.031}}> Em Atendimento  </Text>
+                            <C.Fechado/><Text style={{color: '#4f4f4f',fontSize: widthScreen * 0.031}}> Necessidade de Avaliação</Text>
                         </C.caixat> 
                         <C.caixat>
                             <Icon name={'wrench'} size={20} color={'#67D4D1'}/>
-                            <C.textoCaixa> Manutenção</C.textoCaixa>
-                            <C.textoCaixa>                    </C.textoCaixa>
+                            <Text
+                                style={{
+                                    color: '#4f4f4f',
+                                    fontSize: widthScreen * 0.034
+                                }}
+                            > Manutenção</Text>
+                            <C.textoCaixa>                  </C.textoCaixa>
                             <Icon name={'gears'} size={20} color={'#67D4D1'}/>
-                            <C.textoCaixa> Desenvolvimento</C.textoCaixa>
+                            <Text
+                                style={{
+                                    color: '#4f4f4f',
+                                    fontSize: widthScreen * 0.034
+                                }}
+                            > Desenvolvimento</Text>
                         </C.caixat>
                         <C.caixat>
                             <Icon name={'user'} size={20} color={'#67D4D1'}/>
-                            <C.textoCaixa> Cadastros</C.textoCaixa>
-                            <C.textoCaixa>                          </C.textoCaixa>
+                            <Text
+                                style={{
+                                    color: '#4f4f4f',
+                                    fontSize: widthScreen * 0.034
+                                }}
+                            > Cadastros</Text>
+                            <C.textoCaixa>                        </C.textoCaixa>
                             <Icon name={'windows'} size={20} color={'#67D4D1'}/>
-                            <C.textoCaixa> Infra</C.textoCaixa>
+                            <Text
+                                style={{
+                                    color: '#4f4f4f',
+                                    fontSize: widthScreen * 0.034
+                                }}
+                            > Infra</Text>
                         </C.caixat>
                     </View>                           
             </View>

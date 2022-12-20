@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef } from 'react';
-import { Text, StyleSheet, TouchableOpacity, Image, TextInput, Alert, KeyboardAvoidingView,View, Switch} from 'react-native';
+import { Text, Dimensions, StyleSheet, TouchableOpacity, Image, TextInput, Alert, KeyboardAvoidingView,View, Switch} from 'react-native';
 import TouchID from 'react-native-touch-id';
 import { Platform } from 'react-native';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
@@ -18,6 +18,7 @@ function Login(){
     const [suported, setSuported] = useState(null);
     const [remember, setRemember] = useState();
     const IsFocused = useIsFocused();
+    const widthScreen = Dimensions.get("screen").width;
     useEffect(()=>{
         if(IsFocused)
         {
@@ -202,10 +203,16 @@ function Login(){
                     </Switch>
                 </View>
                 <TouchableOpacity style={styles.button} onPress={HandleLoginBtn}>
-                    <Text style={{fontSize: 24, fontWeight:'bold', color:'#FFF'}}>Entrar</Text>
+                    <Text style={{fontSize: widthScreen * 0.051, fontWeight:'bold', color:'#FFF'}}>Entrar</Text>
                 </TouchableOpacity>
             </LinearGradient>
-            <Text style={styles.txtfin}>Criado por Bruno.Santos</Text>
+            <Text style={{
+                color: '#b4b7ba',
+                justifyContent: 'flex-end',
+                fontSize: widthScreen * 0.045,
+                position: 'relative',
+                bottom: 0
+            }}>Criado por Bruno.Santos</Text>
         </LinearGradient>
     )
 }

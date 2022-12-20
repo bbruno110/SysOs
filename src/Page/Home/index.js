@@ -1,14 +1,16 @@
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 import React, { useState, useEffect } from "react";
-import { Dimensions } from 'react-native';
+import { View } from 'react-native';
 import { useStateValue } from "../../Context/StateContext";
 import api from '../../services/api';
 import C from './style';
 import WallItem from '../../components/WallItem';
+import { Dimensions } from 'react-native';
 
 
 export default () =>{
     const navigation = useNavigation();
+    const widthScreen = Dimensions.get("screen").width;
     const [context,dispatch] = useStateValue();
     const [descricao, setDescricao] = useState('');
     const [loading, setLoading] = useState(true);
@@ -40,7 +42,11 @@ export default () =>{
         setListChamados(result.chamados)
     }
     return(
-        <C.Container>
+        <View style={{
+            width: widthScreen * 1,
+            flex: 1,
+            backgroundColor: "#FFF",
+        }}>  
             <C.inpt
                 placeholder="Digite para pesquisar" 
                 placeholderTextColor="#161b22"
@@ -62,6 +68,6 @@ export default () =>{
                 renderItem={({item})=><WallItem data={item}/>} 
                 keyExtractor={(item)=>item.nrSequency.toString()}
             />
-        </C.Container>
+        </View>
     );
 };
